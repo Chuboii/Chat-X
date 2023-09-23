@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import {auth, onAuthStateChange, signOutUser } from "../utils/firebase/firebase";
+import {auth, createUserDocRef, onAuthStateChange, signOutUser } from "../utils/firebase/firebase";
 import {useNavigate} from 'react-router-dom'
 
 export const UserContext = createContext()
@@ -13,18 +13,16 @@ export const UserProvider = ({children}) =>{
  }
  useEffect(() =>{
     const authChanged = onAuthStateChange((user) =>{
-        if(!user && window.location.pathname !== '/signup'){
+     if(!user && window.location.pathname !== '/signup'){
             navigate('/signin')
-    
-        }
+     }
         else{
             navigate('/')
             setUserInfo(user)
 
         }
     })
-    
-
+  
     return authChanged
  }, [navigate])
 
