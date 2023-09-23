@@ -1,0 +1,70 @@
+@media screen and (min-width:0) and (max-width:600px) {
+    .signin-form 
+    .signin-image{
+     display: none;
+    }
+}
+.signin-form{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    max-width: 600px;
+    display: flex;
+    padding: 3rem;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, .4);
+    
+}
+
+.signin-form .signin-image{
+    width: 70%;
+    margin-right: 5rem;
+    display: block;
+}
+
+.signin-form .signin-image .signin-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.signin-form div{
+    width: 100%;
+    margin-bottom: .2rem;
+}
+
+.signin-form div .signin-err{
+   margin-bottom: .7rem;
+   margin-top: 0;
+    font-size: 13px;
+    color: red;
+    font-family: 'Courier New', Courier, monospace
+}
+
+.signin-form .signin-btn-container {
+    display: flex;
+    justify-content: center;
+}
+.signin-form .signin-btn-container .signin-btn, .signin-google{
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: .8rem 0;
+    width:100px;
+    margin: .5rem;
+    border-radius: 4px;
+}
+
+.signin-form .signin-acct{
+    margin: 0;
+    text-align: center;
+    color: gray;
+}
+
+.signin-form .signin-acct .signin-link{
+    color: blue;
+    text-decoration: none;
+}
+

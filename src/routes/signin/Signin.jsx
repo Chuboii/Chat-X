@@ -1,9 +1,14 @@
 import { useForm} from "react-hook-form"
 import TextField from '@mui/material/TextField';
-import { auth, signInWithEmailAndPass} from "../../utils/firebase/firebase";
-
+import { auth, signInWithEmailAndPass, signInWithGooglePopup} from "../../utils/firebase/firebase";
+import './Signin.css'
+import signinImg from '/src/assets/html.webp'
+import { Link } from "react-router-dom";
 
 export default function Signin(){
+
+
+
     const {register,handleSubmit, formState:{errors}} = useForm({mode:"onChange"})
 
     const registerOptions = {
@@ -24,21 +29,37 @@ const submitForm = async (data) =>{
    console.log(user);
 }
 
+const googleBtn = async (data) =>{
+    const {user} = await signInWithGooglePopup()
+}
+
+const acct  = "Don't have an account?"
     return (
-        <form onSubmit={handleSubmit(submitForm)}>
-        <div className="signin-emaill">
+        <form className="signin-form" onSubmit={handleSubmit(submitForm)}>
+        <div className="signin-image">
+        <img src={signinImg} className="signin-img"/>
+        </div>
+        <div className="sigin-inputs">
+        <div className="signin-email">
 
 <TextField label="Email" variant="outlined" name="email"  {...register("email", registerOptions.email)}/>
 
-{errors.email && <p>{errors.email.message} </p>}
+{errors.email && <p className="signin-err">{errors.email.message} </p>}
 </div>
 
 <div className='signin-password'>
 <TextField type="password" label="Password" variant="outlined"  {...register("password", registerOptions.password)}/>
 
-{errors.password && <p>{errors.password.message} </p>}
+{errors.password && <p className="signin-err">{errors.password.message} </p>}
 </div>
-<button>Sign in</button>
+
+<div className="signin-btn-container">
+<button className="signin-btn">Sign up</button>
+<button className="signin-google" type="button" onClick={googleBtn}>Google</button>
+</div>
+<p className="signin-acct">{acct} <Link className="signin-link" to={'/signup'}>Sign up</Link></p>
+</div>
+
         </form>
     )
 }

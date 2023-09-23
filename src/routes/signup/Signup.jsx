@@ -1,8 +1,9 @@
 import { useForm} from "react-hook-form"
 import TextField from '@mui/material/TextField';
 import { auth, createUserDocRef, createUserWithEmailAndPass, signInWithGooglePopup } from "../../utils/firebase/firebase";
-
-
+import './Signout.css'
+import { Link } from "react-router-dom";
+import signupImg from '/src/assets/html.webp'
 
 export default function Signup(){
 
@@ -52,51 +53,55 @@ const submitForm = async (data)=>{
 }
 
     return (
-        <form onSubmit={handleSubmit(submitForm)}>
-<div className="signup-fnam">
+        <form onSubmit={handleSubmit(submitForm)} className="signup-form">
+        <div className="signup-image">
+        <img className="signup-img" src={signupImg}/>
+        </div>
+        <div className="inputs">
+<div className="signup-firstn">
 
 
 <TextField  label="Firstname" variant="outlined"  name="firstName"  {...register("fullName", registerOptions.fullName)} />
 
 
-{errors.fullName && <p>{errors.fullName.message}</p>}
+{errors.fullName && <p className="signup-err">{errors.fullName.message}</p>}
 </div>
 
-<div className="sf-usernam">
+<div className="signup-user">
 
 <TextField  label="Username" variant="outlined" name="username" {...register("username", registerOptions.username)}/>
 
-{errors.username && <p>{errors.username.message} </p>}
+{errors.username && <p className="signup-err">{errors.username.message} </p>}
 </div>
 
-<div className="sf-emaill">
+<div className="signup-email">
 
 <TextField label="Email" variant="outlined" name="email"  {...register("email", registerOptions.email)}/>
 
-{errors.email && <p>{errors.email.message} </p>}
+{errors.email && <p className="signup-err">{errors.email.message} </p>}
 </div>
 
-<div className='sf-password'>
-<label>firstName</label>
+<div className='signup-password'>
+
 <TextField type="password" label="Password" variant="outlined"  {...register("password", registerOptions.password)}/>
 
-{errors.password && <p>{errors.password.message} </p>}
+{errors.password && <p className="signup-err">{errors.password.message} </p>}
 </div>
 
 
-<div className="sf-confir">
+<div className="signup-cp">
 
 <TextField type="password"  label="Confirm Password" variant="outlined" name="confirmPassword"  {...register("confirmPassword", registerOptions.confirmPassword)} />
 
-{errors.confirmPassword && <p>{errors.confirmPassword.message} </p>}
+{errors.confirmPassword && <p className="signup-err">{errors.confirmPassword.message} </p>}
+</div>
+<div className="signup-btn-container">
+<button className="signup-btn">Sign up</button>
+<button className="signup-google" type="button" onClick={googleBtn}>Google</button>
 </div>
 
-<button>Sign up</button>
-
-<p className="sf-or">Or signup using</p>
-     <button type="button" onClick={googleBtn}>Google</button>
-
-    <p>Already got an account?</p>
+    <p className="signup-acct">Already got an account? <Link className="signup-link" to={'/signin'}>Sign in</Link></p>
+</div>
         </form>
     )
 }
