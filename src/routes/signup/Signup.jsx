@@ -4,18 +4,22 @@ import { auth, createUserDocRef, createUserWithEmailAndPass, signInWithGooglePop
 import './Signout.css'
 import { Link } from "react-router-dom";
 import signupImg from '/src/assets/html.webp'
+import {useContext} from "react"
+import {UserContext} from "/src/context/UserContext"
+import GoogleIcon from '@mui/icons-material/Google';
+import {AlertContext} from "/src/context/AlertContext"
+import Err from "/src/component/alert/err alert/Err"
+import AddImageSvg from "/src/component/svgs/AddImageSvg"
 
 export default function Signup(){
-
+const {handleSigninLink} = useContext(UserContext)
 const {register,handleSubmit, formState:{errors}} = useForm({mode:"onChange"})
-
+const {isValidationToggled, setErrMessage, setIsValidationToggled} = useContext(AlertContext)
+ 
 const registerOptions = {
     fullName:
     {
     required: "You must provide a full name"
-    },
-    username:{
-        required: "You must provide a username"
     },
     email: {
         required: "You must a provide an email",
@@ -45,14 +49,31 @@ const googleBtn = async () =>{
     
 }
 const submitForm = async (data)=>{
+  
+  if(data.password === data.confirmPassword){
+  try{
    const {user} = await createUserWithEmailAndPass(auth, data.email, data.password)
    let displayName = data.fullName
-   let username = data.username
-   const otherParams = {displayName, username}
-   await createUserDocRef(user, otherParams)
+   const otherParams = {displayName}
+   const file = data.file[0]
+   await createUserDocRef(user, otherParams, file)
+  }
+  catch(e){
+    if(e.code === "auth/email-already-in-use"){
+      setIsValidationToggled(true)
+      setErrMessage("Email already in use")
+    }
+  }
+  }
+  else{
+    setIsValidationToggled(true)
+    setErrMessage("Passwords do not match")
+  }
 }
 
     return (
+      <>
+      {isValidationToggled && <Err/>}
         <form onSubmit={handleSubmit(submitForm)} className="signup-form">
         <div className="signup-image">
         <img className="signup-img" src={signupImg}/>
@@ -61,29 +82,58 @@ const submitForm = async (data)=>{
 <div className="signup-firstn">
 
 
-<TextField  label="Firstname" variant="outlined"  name="firstName"  {...register("fullName", registerOptions.fullName)} />
+<TextField 
+InputProps={{
+    style: {
+      color: 'white',
+    },
+  }}  
+  InputLabelProps={{
+    style: {
+      color: 'black',
+    },
+  }}
+label="Display Name" variant="outlined"  name="firstName"  {...register("fullName", registerOptions.fullName)} />
 
 
 {errors.fullName && <p className="signup-err">{errors.fullName.message}</p>}
 </div>
 
-<div className="signup-user">
 
-<TextField  label="Username" variant="outlined" name="username" {...register("username", registerOptions.username)}/>
-
-{errors.username && <p className="signup-err">{errors.username.message} </p>}
-</div>
 
 <div className="signup-email">
 
-<TextField label="Email" variant="outlined" name="email"  {...register("email", registerOptions.email)}/>
+<TextField
+InputProps={{
+    style: {
+      color: 'white',
+    },
+  }}  
+  InputLabelProps={{
+    style: {
+      color: 'black',
+    },
+  }}
+
+ label="Email" variant="outlined" name="email"  {...register("email", registerOptions.email)}/>
 
 {errors.email && <p className="signup-err">{errors.email.message} </p>}
 </div>
 
 <div className='signup-password'>
 
-<TextField type="password" label="Password" variant="outlined"  {...register("password", registerOptions.password)}/>
+<TextField 
+InputProps={{
+    style: {
+      color: 'white',
+    },
+  }}  
+  InputLabelProps={{
+    style: {
+      color: 'black',
+    },
+  }}
+type="password" label="Password" variant="outlined"  {...register("password", registerOptions.password)}/>
 
 {errors.password && <p className="signup-err">{errors.password.message} </p>}
 </div>
@@ -91,17 +141,34 @@ const submitForm = async (data)=>{
 
 <div className="signup-cp">
 
-<TextField type="password"  label="Confirm Password" variant="outlined" name="confirmPassword"  {...register("confirmPassword", registerOptions.confirmPassword)} />
+<TextField InputProps={{
+    style: {
+      color: 'white',
+    },
+  }}  
+  InputLabelProps={{
+    style: {
+      color: 'black',
+    },
+  }} type="password"  label="Confirm Password" variant="outlined" name="confirmPassword"  {...register("confirmPassword", registerOptions.confirmPassword)} />
 
 {errors.confirmPassword && <p className="signup-err">{errors.confirmPassword.message} </p>}
 </div>
+<div className="signup-avatar">
+<AddImageSvg/>
+<div className="signup-file-box">
+<p>Add an avatar </p>
+<input type="file" className="signup-file"/>
+</div>
+</div>
 <div className="signup-btn-container">
 <button className="signup-btn">Sign up</button>
-<button className="signup-google" type="button" onClick={googleBtn}>Google</button>
+<GoogleIcon className="signup-google" type="button" onClick={googleBtn}/>
 </div>
 
-    <p className="signup-acct">Already got an account? <Link className="signup-link" to={'/signin'}>Sign in</Link></p>
+    <p className="signup-acct">Already got an account? <button type="button" className="signup-link" onClick={handleSigninLink} >Sign in</button></p>
 </div>
         </form>
+        </>
     )
 }

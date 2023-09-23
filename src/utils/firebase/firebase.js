@@ -2,6 +2,8 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import {getAuth,signInWithPopup, signOut,onAuthStateChanged ,GoogleAuthProvider,signInWithEmailAndPassword ,createUserWithEmailAndPassword} from "firebase/auth"
 import {getDoc, setDoc, doc, getFirestore} from 'firebase/firestore'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 const firebaseConfig = {
   apiKey: "AIzaSyAMWUp7rACgSsMhuloiiKLNlmNi9Ki7smU",
     authDomain: "chat-app-8d540.firebaseapp.com",
@@ -23,6 +25,9 @@ export const auth = getAuth()
 googleProvider.setCustomParameters({
  params: "select_account"
 })
+
+const storage = getStorage();
+
 
 export const signInWithGooglePopup = () => signInWithPopup(auth,googleProvider)
 
@@ -55,11 +60,30 @@ export const createUserDocRef = async (userAuth, otherParams) => {
 
    if(!getUserDoc.exists()){
    const {displayName, email} = userAuth
-   
+  
+ let {alternativeDisplayName} = otherParams
+
+const storageRef = ref(storage, alternativeDisplayName);
+
+const uploadTask = uploadBytesResumable(storageRef, file);
+let imageUrl = ""
+
+uploadTask.on(
+  (error) => {
+    // Handle unsuccessful uploads
+
+  }, 
+  () => {
+    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+      imageUrl = downloadURL
+    });
+  }
+);
+
     let setUserDoc = await setDoc(userRef, {
       displayName,
       email,
-      profilePicture: '',
+      photoUrl: imageUrl,
       ...otherParams
     })
    }

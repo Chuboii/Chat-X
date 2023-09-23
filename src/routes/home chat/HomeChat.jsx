@@ -1,10 +1,18 @@
-
+import "./HomeChat.scss"
+import HomeChatHeader from "/src/component/home header/HomeChatHeader"
+import HomeChatBody from "/src/component/home body/HomeChatBody"
 
 export default function HomeChat(){
 
     return(
-        <>
-        <h1>This is the homepage</h1>
+      <>
+        <div class="homeChat-body">
+        <HomeChatHeader/>
+        <HomeChatBody/>
+        
+       
+        </div>
+        
         </>
     )
 }
