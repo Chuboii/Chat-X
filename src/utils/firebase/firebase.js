@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import {getAuth,signInWithPopup, signOut,onAuthStateChanged ,GoogleAuthProvider,signInWithEmailAndPassword ,createUserWithEmailAndPassword} from "firebase/auth"
+import {getAuth,signInWithPopup, signOut,onAuthStateChanged ,GoogleAuthProvider,signInWithEmailAndPassword ,createUserWithEmailAndPassword, updateProfile} from "firebase/auth"
 import {getDoc, setDoc, doc, getFirestore} from 'firebase/firestore'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
