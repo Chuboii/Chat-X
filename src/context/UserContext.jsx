@@ -10,11 +10,13 @@ export const UserProvider = ({children}) =>{
  const location = useLocation()
  const [isClicked, setIsClicked] = useState(false)
  const [chatClicked, setChatClicked] = useState(true)
+
  const triggerSignout = async() =>{
     await signOutUser()
  }
  
 const handleSignupLink = ()=>{
+  
 setIsClicked(true)
    navigate("/signup")
   }
@@ -25,14 +27,15 @@ setIsClicked(!isClicked)
 
  useEffect(() =>{
     const authChanged = onAuthStateChange((user) =>{
+      setUserInfo(user)
      if(user){
-       if(chatClicked){
+     /* if(chatClicked){
          navigate("/chat")
        }
        else{
        navigate('/')
             setUserInfo(user)
-       }
+       }*/
      }
         else{
           if(isClicked){
@@ -50,7 +53,7 @@ setIsClicked(!isClicked)
 
 
 
- const value = {userInfo, handleSignupLink, handleSigninLink, triggerSignout}
+ const value = {userInfo, setUserInfo, handleSignupLink, handleSigninLink, triggerSignout}
     return(
         <UserContext.Provider value={value}>
         {children}

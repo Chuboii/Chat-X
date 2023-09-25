@@ -15,8 +15,8 @@ const firebaseConfig = {
               };
 
               // Initialize Firebase
-              const app = initializeApp(firebaseConfig);
-              const analytics = getAnalytics(app);
+            export  const app = initializeApp(firebaseConfig);
+            export  const analytics = getAnalytics(app);
 
 const googleProvider = new GoogleAuthProvider()
 
@@ -26,7 +26,7 @@ googleProvider.setCustomParameters({
  params: "select_account"
 })
 
-const storage = getStorage();
+export const storage = getStorage();
 
 
 export const signInWithGooglePopup = () => signInWithPopup(auth,googleProvider)
@@ -48,7 +48,7 @@ export const onAuthStateChange = (callback) => onAuthStateChanged(auth, callback
 
 export const signOutUser = () => signOut(auth)
 
-let db = getFirestore()
+ const db = getFirestore()
 
 
 
@@ -59,32 +59,15 @@ export const createUserDocRef = async (userAuth, otherParams) => {
    let getUserDoc = await getDoc(userRef)
 
    if(!getUserDoc.exists()){
-   const {displayName, email} = userAuth
-  
- let {alternativeDisplayName} = otherParams
-
-const storageRef = ref(storage, alternativeDisplayName);
-
-const uploadTask = uploadBytesResumable(storageRef, file);
-let imageUrl = ""
-
-uploadTask.on(
-  (error) => {
-    // Handle unsuccessful uploads
-
-  }, 
-  () => {
-    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-      imageUrl = downloadURL
-    });
-  }
-);
+   const {displayName, email, photoURL, uid} = userAuth
+  const dateCreated = new Date()
 
     let setUserDoc = await setDoc(userRef, {
+      uid,
+      dateCreated,
       displayName,
       email,
-      photoUrl: imageUrl,
-      ...otherParams
+      photoURL,
     })
    }
    }
