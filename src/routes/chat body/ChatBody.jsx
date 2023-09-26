@@ -16,6 +16,7 @@ export default function ChatBody(){
     </div>
     </div>
     
+    
     <div className="chatbody-descript">
     <div className="chatbody-name"> Joe doe </div>
     <div className="chatbody-online"> online </div>

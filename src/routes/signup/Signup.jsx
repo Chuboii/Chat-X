@@ -1,6 +1,6 @@
 import { useForm} from "react-hook-form"
 import TextField from '@mui/material/TextField';
-import { auth, createUserDocRef, storage, createUserWithEmailAndPass, signInWithGooglePopup } from "../../utils/firebase/firebase";
+import { auth, createUserDocRef, storage, createUserWithEmailAndPass,createUserLocalData, signInWithGooglePopup } from "../../utils/firebase/firebase";
 import './Signout.css'
 import { Link } from "react-router-dom";
 import signupImg from '/src/assets/html.webp'
@@ -21,10 +21,15 @@ const {register,handleSubmit, formState:{errors}} = useForm({mode:"onChange"})
 const {isValidationToggled, setErrMessage, setIsValidationToggled} = useContext(AlertContext)
 const [imageUrl, setImageUrl] = useState(null)
 const [done, setDone] = useState(false)
+const [userData, setUserData] = useState([])
 const registerOptions = {
-    fullName:
+    firstName:
     {
-    required: "You must provide a full name"
+    required: "You must provide a first name"
+    },
+  lastName:
+    {
+    required: "You must provide a last name"
     },
     email: {
         required: "You must a provide an email",
@@ -81,9 +86,12 @@ const submitForm = async (data)=>{
   if(data.password === data.confirmPassword){
   try{
    const {user} = await createUserWithEmailAndPass(auth, data.email, data.password)
-   let displayName = data.fullName
+   let firstName = data.firstName
+   let lastName = data.lastName
    let email = data.email
- //  const otherParams = {displayName, email}
+   let displayName = `${firstName} ${lastName}`
+   const fullName = [displayName]
+  const additionalNames = [[firstName], [lastName], fullName]
   
   const storageRef = ref(storage, `${displayName} ${user.uid}`);
 
@@ -91,8 +99,6 @@ const uploadTask = uploadBytesResumable(storageRef, imageUrl);
 
 uploadTask.on('state_changed', 
   (snapshot) => {
-    // Observe state change events such as progress, pause, and resume
-    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
 
     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
     console.log('Upload is ' + progress + '% done');
@@ -123,12 +129,16 @@ uploadTask.on('state_changed',
     email,
     photoURL: downloadURL
      })
-     await createUserDocRef(user)
+     await createUserDocRef(user, additionalNames)
+ 
+await createUserLocalData(user, additionalNames)
+    
+     
       }
       
-    });
+    })
   }
-);
+)
  
 
  
@@ -170,12 +180,31 @@ InputProps={{
       color: 'black',
     },
   }}
-label="Display Name" variant="outlined"  name="firstName"  {...register("fullName", registerOptions.fullName)} />
+label="First Name" variant="outlined"  name="firstName"  {...register("firstName", registerOptions.firstName)} />
 
 
-{errors.fullName && <p className="signup-err">{errors.fullName.message}</p>}
+{errors.firstName && <p className="signup-err">{errors.firstName.message}</p>}
 </div>
 
+<div className="signup-firstn">
+
+
+<TextField 
+InputProps={{
+    style: {
+      color: 'white',
+    },
+  }}  
+  InputLabelProps={{
+    style: {
+      color: 'black',
+    },
+  }}
+label="Last Name" variant="outlined"  name="lastName"  {...register("lastName", registerOptions.lastName)} />
+
+
+{errors.lastName && <p className="signup-err">{errors.lastName.message}</p>}
+</div>
 
 
 <div className="signup-email">

@@ -1,9 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import {getAuth,signInWithPopup, signOut,onAuthStateChanged ,GoogleAuthProvider,signInWithEmailAndPassword ,createUserWithEmailAndPassword, updateProfile} from "firebase/auth"
-import {getDoc, setDoc, doc, getFirestore} from 'firebase/firestore'
+import {getDoc, setDoc, doc, getFirestore,updateDoc, arrayUnion,} from 'firebase/firestore'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-
+import {v4} from "uuid"
 const firebaseConfig = {
   apiKey: "AIzaSyAMWUp7rACgSsMhuloiiKLNlmNi9Ki7smU",
     authDomain: "chat-app-8d540.firebaseapp.com",
@@ -53,21 +53,27 @@ export const signOutUser = () => signOut(auth)
 
 
 export const createUserDocRef = async (userAuth, otherParams) => {
-   let userRef = doc(db, 'users', userAuth.uid)
-   
+   let userGlobalRef = doc(db, 'user global', userAuth.uid)
+  
    try{
-   let getUserDoc = await getDoc(userRef)
+   let getUserGlobalDoc = await getDoc(userGlobalRef)
+//let getUserLocalDoc = await getDoc(userLocalRef)
 
-   if(!getUserDoc.exists()){
+   if(!getUserGlobalDoc.exists()){
    const {displayName, email, photoURL, uid} = userAuth
   const dateCreated = new Date()
 
-    let setUserDoc = await setDoc(userRef, {
+    let setUserGlobalDoc = await setDoc(userGlobalRef, {
       uid,
       dateCreated,
+      firstName: otherParams[0],
+      lastName: otherParams[1],
+      fullName: otherParams[2],
       displayName,
       email,
       photoURL,
+      isFriend: false,
+      changeBtnText: "Add Friend"
     })
    }
    }
@@ -75,4 +81,50 @@ export const createUserDocRef = async (userAuth, otherParams) => {
     console.log(e);
    }
 
+}
+
+export const createUserFriendRef = async (userAuth, addUsers) => {
+ const userFriendRef = doc(db, "userFriends", userAuth.uid)
+ 
+const doesDataExists = await getDoc(userFriendRef)
+ 
+if(!doesDataExists.exists()){
+   await setDoc(userFriendRef, {
+     friends: [{}]
+   })
+ }
+ 
+ await updateDoc(userFriendRef, {
+    friends: arrayUnion({
+      ...addUsers
+    })
+});
+}
+
+export const createUserLocalData = async (userAuth, otherParams) =>{
+  let userLocalRef = doc(db, "user local", "usue68_$-#7#twywuiwi")
+  const getLocalRef = await getDoc(userLocalRef)
+  const {uid, displayName, email, photoURL} = userAuth
+const dateCreated = new Date()
+
+  if(!getLocalRef.exists()){
+    await setDoc(userLocalRef, {
+      allUserLocalRef: [{}]
+    })
+  }
+  
+  await updateDoc(userLocalRef, {
+    allUserLocalRef: arrayUnion({
+      uid,
+      dateCreated,
+      firstName: otherParams[0],
+      lastName: otherParams[1],
+      fullName: otherParams[2],
+      displayName,
+      email,
+      photoURL,
+      isFriend: false,
+      changeBtnText: "Add Friend"
+    })
+  })
 }

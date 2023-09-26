@@ -1,0 +1,88 @@
+.search-user-container{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:gray;
+  
+  .search-user-input-container{
+
+position:fixed;
+top:0;
+left:0;
+right:0;
+padding:1rem .5rem;
+
+  .search-user-input{
+    width:90%;
+    padding:.8rem 1rem;
+    border-radius:10px;
+    position: relative;
+    left:50%;
+    transform: translateX(-50%);
+    top:.3rem;
+    border:1px solid;
+  }
+ .search-user-ic{
+   color:black;
+   font-size:35px;
+   z-index:2;
+   position:absolute;
+   right:3rem;
+   top:1.6rem;
+  }
+  }
+  .display-searchItems{
+    margin:2rem 1rem;
+   margin-top:6rem;
+    
+  
+    
+    .search-user-box{
+      display:flex;
+     align-items:center;
+     background:black;
+     border-radius:10px;
+     padding:.5rem 1.2rem;
+     box-shadow: 0 0 20px 0 rgba(0, 0, 0, .2);
+    background-color: rgba(255, 255, 255, .15);
+    backdrop-filter: blur(5px);
+    margin-bottom:1rem;
+    
+      .search-user-image{
+        width:110px;
+        height:110px;
+        margin-bottom:1rem;
+        .search-user-img{
+          width:100%;
+          height:100%;
+          border-radius: 50%;
+          object-fit:cover;
+        }
+      }
+      
+      .search-user-descript{
+        margin-left:1.5rem;
+        width:50%;
+        .search-user-name{
+          margin:.4rem 0;
+        }
+        
+        .search-user-stat{
+         margin:.4rem 0;
+        }
+        
+        .search-user-btn{
+          width:60%;
+          padding:.8rem 0;
+          border:none;
+          background: rgb(63,94,251);
+background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(37,3,44,1) 100%);
+color: white;
+border-radius:10px;
+        }
+      }
+    }
+  }
+}

@@ -47,7 +47,7 @@ setIsClicked(!isClicked)
         }
     })
     
-  
+    
     return authChanged
  }, [navigate])
 
