@@ -70,11 +70,11 @@ await createUserFriendRef(userInfo, user)
    const last = [lastNamSearch]
    const full = [fullNamSearch]
    
-  const userLocalRef = collection(db, "user local");
+  const userLocalRef = collection(db, "user global");
 
   const query1 = await getDocs(query(userLocalRef, where("firstName", "array-contains-any", first)));
   const query2 = await getDocs(query(userLocalRef, where("lastName", "array-contains-any", last)));
-  const query3 = await getDocs(query(userLocallRef, where("fullName", "array-contains-any", full)));
+  const query3 = await getDocs(query(userLocalRef, where("fullName", "array-contains-any", full)));
 
   const dataArray = [];
 
@@ -98,7 +98,7 @@ localStorage.setItem("btnText", JSON.stringify("Friend Added"))
   return (
 
     <div className="search-user-container">
-    
+<div className="search-user-divider">   
    <form onSubmit={submitForm} className="search-user-input-container">
     <input placeholder="Search here to meet people..." value={value} onChange={changeValue} type="search" className="search-user-input"/>
    <button> <SearchIcon className="search-user-ic"/></button>
@@ -119,16 +119,26 @@ localStorage.setItem("btnText", JSON.stringify("Friend Added"))
 sleeping
 </div>
 
-<button className="search-user-btn" onClick = {()=>{
+<div className="search-user-btn-box">
+<button className="search-user-btn" 
+onClick = {()=>{
   addFriends(el.uid)
 }
 } >
-  {el.changeBtnText}
+  {el.isFriend ? "Friend Added" : "Add Friend"}
 </button>
 
+<button className="search-user-btn" >
+ View Profile
+</button>
+</div>
 </div>
 </div>
 ))}
+    </div>
+    </div>
+    <div className="search-user-second-divder">
+
     </div>
     </div>
     )

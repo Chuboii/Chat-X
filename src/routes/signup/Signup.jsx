@@ -1,8 +1,7 @@
 import { useForm} from "react-hook-form"
 import TextField from '@mui/material/TextField';
-import { auth, createUserDocRef, storage, createUserWithEmailAndPass,createUserLocalData, signInWithGooglePopup } from "../../utils/firebase/firebase";
+import { auth, createUserDocRef, storage, createUserWithEmailAndPass, signInWithGooglePopup } from "../../utils/firebase/firebase";
 import './Signout.css'
-import { Link } from "react-router-dom";
 import signupImg from '/src/assets/html.webp'
 import {useContext, useState, useEffect} from "react"
 import {UserContext} from "/src/context/UserContext"
@@ -21,7 +20,6 @@ const {register,handleSubmit, formState:{errors}} = useForm({mode:"onChange"})
 const {isValidationToggled, setErrMessage, setIsValidationToggled} = useContext(AlertContext)
 const [imageUrl, setImageUrl] = useState(null)
 const [done, setDone] = useState(false)
-const [userData, setUserData] = useState([])
 const registerOptions = {
     firstName:
     {
@@ -71,9 +69,7 @@ fileInput.addEventListener('change', function(event) {
   const reader = new FileReader();
 
   reader.onload = function(event) {
-    const dataURL = event.target.result; // This is the data URL representing the file
-    // You can use the data URL, for example to display an image
-   
+
   };
 
  reader.readAsDataURL(file)
@@ -130,9 +126,6 @@ uploadTask.on('state_changed',
     photoURL: downloadURL
      })
      await createUserDocRef(user, additionalNames)
- 
-await createUserLocalData(user, additionalNames)
-    
      
       }
       

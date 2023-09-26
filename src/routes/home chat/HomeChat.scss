@@ -1,9 +1,40 @@
-.homeChat-body{
- background: rgb(27,2,43);
-background: radial-gradient(circle, rgba(27,2,43,1) 0%, rgba(0,0,0,1) 100%);
-  position:absolute;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
+
+@media screen and (min-width:0) and (max-width:700px) {
+  .homechat-main-body{
+    background: rgb(27,2,43);
+   background: radial-gradient(circle, rgba(27,2,43,1) 0%, rgba(0,0,0,1) 100%);
+     position:absolute;
+     top:0;
+     bottom:0;
+     left:0;
+     right:0;
+   
+   }
+   
+   
+}
+
+@media screen and (min-width:700px) {
+  .homechat-main-body{
+    border: 2px solid;
+    width: 100%;
+   position: absolute;
+   top: 0;
+   bottom: 0;
+
+    .homechat-divider{
+      display: flex;
+      .homechat-first{
+        width: 30%;
+        
+      }
+      .homechat-second{
+width: 70%;
+        background-color: red;
+
+      }
+    }
+   }
+
+  
 }

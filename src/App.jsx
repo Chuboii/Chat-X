@@ -4,6 +4,7 @@ import Signup from "./routes/signup/Signup"
 import HomeChat from "./routes/home chat/HomeChat"
 import ChatBody from "/src/routes/chat body/ChatBody"
 import SearchUsers from "/src/routes/search users/SearchUsers"
+import AddedFriends from "./routes/added friend page/AddedFriends"
 
 
 function App() {
@@ -16,7 +17,9 @@ function App() {
 <Route path="/signin" element={<Signin/>}/>
 <Route path="/chat" element={<ChatBody/>}/>
 <Route path="/search" element={<SearchUsers/>}/>
-  </Routes>
+<Route path="/friends" element={<AddedFriends/>}/>
+  
+</Routes>
     </>
   )
 }

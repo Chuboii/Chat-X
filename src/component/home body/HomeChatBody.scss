@@ -1,3 +1,17 @@
-.homechat-body{
-  margin-top:4rem;
+@media screen and (min-width:0) and (max-width:700px){
+  .homechat-body{
+    margin-top:4rem;
+  }
+  
+}
+
+
+@media screen and (min-width:700px) {
+  .homechat-body{
+    width:100%;
+    overflow: hidden;
+    overflow-y:scroll ;
+    height: 100dvh;
+  
+  }
 }

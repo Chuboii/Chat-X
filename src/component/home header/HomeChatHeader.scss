@@ -1,21 +1,49 @@
-.homechat-header{
-  display:flex;
-  justify-content: space-between;
-  padding:1.5rem 1rem;
-  background:black;
-  position:fixed;
-  top:0;
-  right:0;
-  left:0;
-  
-  .homeheader-bio{
-    font-size:14px;
-  }
-  
-  .homeheader-icons{
+
+@media screen and (min-width:0) and (max-width:700px) {
+  .homechat-header{
+    display:flex;
+    justify-content: space-between;
+    padding:1.5rem 1rem;
+    background:black;
+    position:fixed;
+    top:0;
+    right:0;
+    left:0;
     
-    .homeh-icon-search, .homeh-icon-ellips, .homeh-icon-camera{
-      margin-right:1rem;
+    .homeheader-bio{
+      font-size:14px;
+    }
+    
+    .homeheader-icons{
+      
+      .homeh-icon-search, .homeh-icon-ellips, .homeh-icon-camera{
+        margin-right:1rem;
+      }
     }
   }
+  
+}
+
+@media screen and (min-width:700px) {
+  .homechat-header{
+    display:flex;
+    justify-content: space-between;
+    padding:1.5rem 1rem;
+    background:black;
+    width: 100%;
+    
+    
+    
+    .homeheader-bio{
+      font-size:14px;
+    }
+    
+    .homeheader-icons{
+      
+      .homeh-icon-search, .homeh-icon-ellips, .homeh-icon-camera{
+        margin-right:1rem;
+      }
+    }
+  }
+  
 }

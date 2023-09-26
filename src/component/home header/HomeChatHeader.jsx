@@ -2,6 +2,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import "./HomeChatHeader.scss"
+
 export default function HomeChatHeader(){
   
   return(

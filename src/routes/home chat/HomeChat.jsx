@@ -1,15 +1,19 @@
 import "./HomeChat.scss"
-import HomeChatHeader from "/src/component/home header/HomeChatHeader"
 import HomeChatBody from "/src/component/home body/HomeChatBody"
-
+import ChatBody from "/src/routes/chat body/ChatBody.jsx"
 export default function HomeChat(){
 
     return(
       <>
-        <div class="homeChat-body">
-        <HomeChatHeader/>
+        <div className="homechat-main-body">
+        <div className="homechat-divider">
+       <div className="homechat-first">
         <HomeChatBody/>
-        
+        </div>
+        <div className="homechat-second">
+      <ChatBody/>
+        </div>
+        </div>
        
         </div>
         

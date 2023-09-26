@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import {getAuth,signInWithPopup, signOut,onAuthStateChanged ,GoogleAuthProvider,signInWithEmailAndPassword ,createUserWithEmailAndPassword, updateProfile} from "firebase/auth"
 import {getDoc, setDoc, doc, getFirestore,updateDoc, arrayUnion,} from 'firebase/firestore'
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getStorage} from "firebase/storage";
 import {v4} from "uuid"
 const firebaseConfig = {
   apiKey: "AIzaSyAMWUp7rACgSsMhuloiiKLNlmNi9Ki7smU",
@@ -62,8 +62,8 @@ export const createUserDocRef = async (userAuth, otherParams) => {
    if(!getUserGlobalDoc.exists()){
    const {displayName, email, photoURL, uid} = userAuth
   const dateCreated = new Date()
-
-    let setUserGlobalDoc = await setDoc(userGlobalRef, {
+  
+  await setDoc(userGlobalRef, {
       uid,
       dateCreated,
       firstName: otherParams[0],
@@ -72,8 +72,7 @@ export const createUserDocRef = async (userAuth, otherParams) => {
       displayName,
       email,
       photoURL,
-      isFriend: false,
-      changeBtnText: "Add Friend"
+      isFriend: false
     })
    }
    }
@@ -99,32 +98,4 @@ if(!doesDataExists.exists()){
       ...addUsers
     })
 });
-}
-
-export const createUserLocalData = async (userAuth, otherParams) =>{
-  let userLocalRef = doc(db, "user local", "usue68_$-#7#twywuiwi")
-  const getLocalRef = await getDoc(userLocalRef)
-  const {uid, displayName, email, photoURL} = userAuth
-const dateCreated = new Date()
-
-  if(!getLocalRef.exists()){
-    await setDoc(userLocalRef, {
-      allUserLocalRef: [{}]
-    })
-  }
-  
-  await updateDoc(userLocalRef, {
-    allUserLocalRef: arrayUnion({
-      uid,
-      dateCreated,
-      firstName: otherParams[0],
-      lastName: otherParams[1],
-      fullName: otherParams[2],
-      displayName,
-      email,
-      photoURL,
-      isFriend: false,
-      changeBtnText: "Add Friend"
-    })
-  })
 }
