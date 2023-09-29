@@ -13,13 +13,15 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import {updateProfile} from "firebase/auth"
 import DarkBg from "/src/component/dark bg/DarkBg"
 import Loader from "/src/component/loader/Loader"
-
+import {useNavigate} from "react-router-dom"
 export default function Signup(){
 const {handleSigninLink} = useContext(UserContext)
 const {register,handleSubmit, formState:{errors}} = useForm({mode:"onChange"})
 const {isValidationToggled, setErrMessage, setIsValidationToggled} = useContext(AlertContext)
 const [imageUrl, setImageUrl] = useState(null)
 const [done, setDone] = useState(false)
+const [googleOtherParams, setGoogleOtherParams] = useState([])
+const navigate = useNavigate()
 const registerOptions = {
     firstName:
     {
@@ -54,12 +56,20 @@ const registerOptions = {
 const googleBtn = async () =>{
     const {user} = await signInWithGooglePopup()
     await updateProfile(user, {
-    photoURL: user.photoURL
+    photoURL: user.photoURL,
   })
-  console.log(user)
-    await createUserDocRef(user)
-    
+  const findSpace = user.displayName.split("").indexOf(" ")
+  const firstName = user.displayName.split("").splice(0, findSpace)
+ const lastName = user.displayName.split("").splice(findSpace, user.displayName.length)
+ 
+  const other = [[firstName.join("")], [lastName.join("")], [user.displayName]]
+    await createUserDocRef(user, other)
+    if(user){
+      navigate("/")
+    }
 }
+
+
 useEffect(()=>{
   const fileInput = document.querySelector(".signup-file"); // Assuming you have an input element of type file in your HTML
 
@@ -77,6 +87,8 @@ fileInput.addEventListener('change', function(event) {
 });
 
 },[])
+
+
 const submitForm = async (data)=>{
   
   if(data.password === data.confirmPassword){

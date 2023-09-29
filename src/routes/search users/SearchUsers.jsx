@@ -1,6 +1,6 @@
 import img from "/src/assets/html.webp"
 import "./SearchUsers.scss"
-import {useState} from "react"
+import {useState, useEffect} from "react"
 import {collection, query, where, getDocs, getFirestore} from 'firebase/firestore'
 import {createUserFriendRef} from "/src/utils/firebase/firebase"
 import SearchIcon from '@mui/icons-material/Search';
@@ -38,31 +38,37 @@ const [hasUserAdded, setHasUserAdded] = useState(false)
  }
  
  
- 
+ useEffect(()=>{
+   const add = async () => {
+     try{
+await createUserFriendRef(userInfo, addUser)
+   }
+   catch(e){
+     console.log(e)
+   }
+   }
+   add()
+   console.log(addUser)
+ }, [addUser])
 
  
 const addFriends = async (idx) => {
- 
-  
   const findItem = user.find(el => el.uid === idx)
   if(findItem){
  
  const changeBtn = user.map(el => {
       if(el.uid === idx){
-        return {...el, isFriend:true, changeBtnText: "Friend Added"}
+        return {...el, isFriend:true}
       }
       else{
         return el
 }
     })
-    setUser(changeBtn)
- 
-await createUserFriendRef(userInfo, user)
-
+    setAddUser(changeBtn)
     }
-    
-    
+
 }
+
   
  const searchUsersFromDb = async (firstNamSearch, lastNamSearch, fullNamSearch) => {
    
@@ -71,7 +77,7 @@ await createUserFriendRef(userInfo, user)
    const full = [fullNamSearch]
    
   const userLocalRef = collection(db, "user global");
-
+try{
   const query1 = await getDocs(query(userLocalRef, where("firstName", "array-contains-any", first)));
   const query2 = await getDocs(query(userLocalRef, where("lastName", "array-contains-any", last)));
   const query3 = await getDocs(query(userLocalRef, where("fullName", "array-contains-any", full)));
@@ -91,10 +97,13 @@ await createUserFriendRef(userInfo, user)
   });
 
   setUser(dataArray);
-
+}
+catch(e){
+  console.log(e)
+}
  
 }
-localStorage.setItem("btnText", JSON.stringify("Friend Added"))
+
   return (
 
     <div className="search-user-container">

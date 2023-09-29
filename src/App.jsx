@@ -11,6 +11,7 @@ function App() {
  
   return (
     <>
+  
 <Routes>
 <Route path='/' element={<HomeChat/>}/>
 <Route path="/signup" element={<Signup/>}/>

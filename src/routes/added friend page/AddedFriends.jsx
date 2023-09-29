@@ -5,43 +5,71 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './AddeFriends.scss'
 import  VerifiedUser  from '@mui/icons-material/VerifiedUser';
 import img from '/src/assets/html.webp'
-
-import {collection, doc, getDocs, query} from 'firebase/firestore'
+import {doc, getDoc, query} from 'firebase/firestore'
+import {UserContext} from "/src/context/UserContext"
 import {db} from '/src/utils/firebase/firebase'
-
+import {useEffect, useState, useContext} from "react"
+import {useNavigate} from "react-router-dom"
+import FriendSearch from "/src/component/friends search/FriendSearch"
 export default function AddedFriends(){
+const [data, setData] = useState([])
+const {userInfo} = useContext(UserContext)
+const navigate = useNavigate()
+const [toggleSearch, setToggleSearch] = useState(false)
+const [val, setVal] = useState("")
 
+const getFriendsFromDoc = async()=>{
+ const userFriendsRef = doc(db, "userFriends", userInfo.uid)
+ const getDocRef = await getDoc(userFriendsRef)
+ if(getDocRef.exists()){
+   const dataRef = getDocRef.data()
+   const filteredData = dataRef.friends.filter((el,idx) => idx > 0)
+  const filtered = filteredData.filter(el =>{
+    return el[0].displayName.toLowerCase().includes(val.toLowerCase())
+  })
+  setData(filtered)
+ }
+}
 
+useEffect(()=>{
+  const getDocFromDb = async() =>{
+    try{
+ 
+    await getFriendsFromDoc()
+   
+    }
+    catch(e){
+      console.log(e)
+    }
+  }
+  getDocFromDb()
+  
+  
+},[data])
 
-
-
-
-
-const getAddedFriendsFromDb = () => {
-    const addedFriendsCollection =  doc(db, 'user friends')
-
-    const q = query(addedFriendsCollection)
-    
-} 
-
-
-
-
-
-
+const backToHome = () =>{
+  navigate("/")
+}
+const toggleSearchBtn = () =>{
+  setToggleSearch(true)
+}
     return (
+      <>
+ 
         <div className="added-friends-container">
+            {toggleSearch && <FriendSearch
+filterSearchData={data} setFilterSearch={setData} toggleSearch={setToggleSearch} setValu={setVal}/>}
         <div className='added-friends-first'>
         <header className='added-friends-header'>
         <div className='added-friends-sub-header'>
         <div className='added-friends-back'>
-        <ArrowBackIcon/>
+        <ArrowBackIcon onClick={backToHome}/>
         <div className='added-friends-text'>
         <p className='added-friends-friends'>
         Select friends 
         </p>
         <p className='added-friends-no'>
-        102 friends
+        {data.length} friend(s)
         </p>
 
         </div>
@@ -49,7 +77,7 @@ const getAddedFriendsFromDb = () => {
         </div>
 
         <div className='added-friends-icons'>
-     <SearchIcon/>
+     <SearchIcon onClick={toggleSearchBtn} sx={{marginRight:"1rem"}}/>
      <MoreVertIcon/>
      </div>
         </div>
@@ -65,24 +93,26 @@ Add Friends
         </div>
         </header>
         <div className='added-friends-divider-text'>
-        Friends on chatty pro
+        Friends on chatty pro (tap to chat)
         </div>
 
         <main className='added-friends-main'>
-        
+       {
+       data.map(el =>
         <div className='added-friends-chat-box'>
         <div className='added-friends-image'>
-        <img src={img} className='added-friends-img'/>
+        <img src={el[0].photoURL} className='added-friends-img'/>
         </div>
         <div className='added-friends-user-info'>
         <p className='added-friends-user-name'>
-        Joe Doe
+        {el[0].displayName}
         </p>
         <p className='added-friends-user-stat'>
         sleeping
         </p>
         </div>
         </div>
+     )  }
         </main>
         </div>
 
@@ -90,5 +120,6 @@ Add Friends
         hello
         </div>
         </div>
+        </>
     )
 }

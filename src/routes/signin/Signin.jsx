@@ -32,7 +32,6 @@ export default function Signin(){
 const submitForm = async (data) =>{
   try{
   let {user} = await signInWithEmailAndPass(auth, data.email, data.password)
-  console.log(user)
   }
   catch(e){
     if(e.code === "auth/invalid-login-credentials"){
@@ -45,7 +44,6 @@ const submitForm = async (data) =>{
 
 const googleBtn = async (data) =>{
     const {user} = await signInWithGooglePopup()
-    console.log()
 }
 
 

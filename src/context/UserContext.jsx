@@ -1,62 +1,61 @@
 import { createContext, useEffect, useState } from "react";
-import {auth, createUserDocRef, onAuthStateChange, signOutUser } from "../utils/firebase/firebase";
-import {useNavigate, useLocation} from 'react-router-dom'
+import { auth, onAuthStateChange, signOutUser,setUserOnlineStatus } from "../utils/firebase/firebase";
+import { useNavigate } from 'react-router-dom';
 
-export const UserContext = createContext()
+export const UserContext = createContext();
 
-export const UserProvider = ({children}) =>{
- const [userInfo, setUserInfo] = useState(null)
- const navigate = useNavigate()
- const location = useLocation()
- const [isClicked, setIsClicked] = useState(false)
- const [chatClicked, setChatClicked] = useState(true)
+function getUserData() {
+  let storedData = localStorage.getItem("userInfo");
+  return storedData ? JSON.parse(storedData) : null; // Return null for no user data
+}
 
- const triggerSignout = async() =>{
-    await signOutUser()
- }
- 
-const handleSignupLink = ()=>{
-  
-setIsClicked(true)
-   navigate("/signup")
-  }
-  const handleSigninLink = ()=>{
-setIsClicked(!isClicked)
-   navigate("/signin")
+export const UserProvider = ({ children }) => {
+  const navigate = useNavigate();
+  const [isClicked, setIsClicked] = useState(false);
+  const [userInfo, setUserInfo] = useState(getUserData());
+
+  const triggerSignout = async () => {
+    await signOutUser();
+    
   }
 
- useEffect(() =>{
-    const authChanged = onAuthStateChange((user) =>{
-      setUserInfo(user)
-     if(user){
-     /* if(chatClicked){
-         navigate("/chat")
-       }
-       else{
-       navigate('/')
-            setUserInfo(user)
-       }*/
-     }
-        else{
-          if(isClicked){
-            navigate('/signup')
-          }
-          else{
-            navigate('/signin')
-          }
+  const handleSignupLink = () => {
+    setIsClicked(true);
+    navigate("/signup");
+  }
+
+  const handleSigninLink = () => {
+    setIsClicked(!isClicked);
+    navigate("/signin");
+  }
+
+  useEffect(() => {
+    const authChanged = onAuthStateChange(async(user) => {
+      if (user) {
+      await setUserOnlineStatus(userInfo, true)
+        navigate("/");
+        localStorage.setItem("userInfo", JSON.stringify(user));
+        setUserInfo(user);
+      } else {
+        if (isClicked) {
+          navigate("/signup");
+        } else {
+          navigate("/signin");
         }
-    })
-    
-    
-    return authChanged
- }, [navigate])
+      }
+    });
+   
+    return () => {
+      authChanged();
+    }
+  }, [isClicked]);
 
+  const value = { userInfo, handleSignupLink, handleSigninLink, triggerSignout };
+  
 
-
- const value = {userInfo, setUserInfo, handleSignupLink, handleSigninLink, triggerSignout}
-    return(
-        <UserContext.Provider value={value}>
-        {children}
-        </UserContext.Provider>
-    )
+  return (
+    <UserContext.Provider value={value}>
+      {children}
+    </UserContext.Provider>
+  );
 }

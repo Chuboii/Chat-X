@@ -12,6 +12,15 @@
     
     .homeheader-bio{
       font-size:14px;
+      display:flex;
+      .homeheader-bio-divider{
+        display: flex;
+        flex-direction: column;
+        margin-left:.9rem;
+        .homeheader-stat{
+          margin-top:.5rem;
+        }
+      }
     }
     
     .homeheader-icons{
@@ -36,6 +45,14 @@
     
     .homeheader-bio{
       font-size:14px;
+       .homeheader-bio-divider{
+        display: flex;
+        flex-direction: column;
+        margin-left:.9rem;
+        .homeheader-stat{
+          margin-top:.5rem;
+        }
+       }
     }
     
     .homeheader-icons{

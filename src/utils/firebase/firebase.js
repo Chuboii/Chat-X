@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import {getAuth,signInWithPopup, signOut,onAuthStateChanged ,GoogleAuthProvider,signInWithEmailAndPassword ,createUserWithEmailAndPassword, updateProfile} from "firebase/auth"
-import {getDoc, setDoc, doc, getFirestore,updateDoc, arrayUnion,} from 'firebase/firestore'
+import {getDoc, setDoc, doc, getFirestore,updateDoc, arrayUnion} from 'firebase/firestore'
 import { getStorage} from "firebase/storage";
 import {v4} from "uuid"
 const firebaseConfig = {
@@ -48,7 +48,7 @@ export const onAuthStateChange = (callback) => onAuthStateChanged(auth, callback
 
 export const signOutUser = () => signOut(auth)
 
- const db = getFirestore()
+export const db = getFirestore()
 
 
 
@@ -72,7 +72,8 @@ export const createUserDocRef = async (userAuth, otherParams) => {
       displayName,
       email,
       photoURL,
-      isFriend: false
+      isFriend: false,
+      isOnline:false
     })
    }
    }
@@ -99,3 +100,14 @@ if(!doesDataExists.exists()){
     })
 });
 }
+
+export const setUserOnlineStatus = async (userAuth, isOnline) => {
+  const userRef = doc(db, "userFriends", userAuth.uid)
+  
+await updateDoc(userRef, {
+    isOnline: isOnline,
+  });
+};
+
+
+
