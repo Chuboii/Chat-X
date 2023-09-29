@@ -9,8 +9,6 @@ export default function UsersOnline(){
 let {userInfo} = useContext(UserContext)
 
 useEffect(()=>{
-
- 
 const unsub = onSnapshot(doc(db, "userFriends", userInfo.uid), (doc) => {
   doc.data().friends.forEach(el =>{
     console.log("Current data: ", el[0]);
@@ -23,7 +21,6 @@ const unsub = onSnapshot(doc(db, "userFriends", userInfo.uid), (doc) => {
 
 return unsub
 }, [])
-
 
 
 

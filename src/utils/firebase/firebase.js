@@ -100,7 +100,7 @@ if(!doesDataExists.exists()){
     })
 });
 }
-
+/*
 export const setUserOnlineStatus = async (userAuth, isOnline) => {
   const userRef = doc(db, "userFriends", userAuth.uid)
   
@@ -108,6 +108,4 @@ await updateDoc(userRef, {
     isOnline: isOnline,
   });
 };
-
-
-
+*/

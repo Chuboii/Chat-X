@@ -1,12 +1,12 @@
 import { createContext, useEffect, useState } from "react";
-import { auth, onAuthStateChange, signOutUser,setUserOnlineStatus } from "../utils/firebase/firebase";
+import { auth, onAuthStateChange, signOutUser } from "../utils/firebase/firebase";
 import { useNavigate } from 'react-router-dom';
 
 export const UserContext = createContext();
 
 function getUserData() {
   let storedData = localStorage.getItem("userInfo");
-  return storedData ? JSON.parse(storedData) : null; // Return null for no user data
+  return storedData ? JSON.parse(storedData) : {}; // Return null for no user data
 }
 
 export const UserProvider = ({ children }) => {
@@ -32,7 +32,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const authChanged = onAuthStateChange(async(user) => {
       if (user) {
-      await setUserOnlineStatus(userInfo, true)
+    //  await setUserOnlineStatus(userInfo, true)
         navigate("/");
         localStorage.setItem("userInfo", JSON.stringify(user));
         setUserInfo(user);
