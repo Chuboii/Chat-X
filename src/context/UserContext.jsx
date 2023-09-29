@@ -6,7 +6,18 @@ export const UserContext = createContext();
 
 function getUserData() {
   let storedData = localStorage.getItem("userInfo");
-  return storedData ? JSON.parse(storedData) : {}; // Return null for no user data
+  return storedData ? JSON.parse(storedData) : {
+      uid: "",
+      dateCreated: "",
+      firstName: "",
+      lastName: "",
+      fullName: "",
+      displayName:"",
+      email: "",
+      photoURL:"",
+      isFriend: false,
+      isOnline:false
+  }
 }
 
 export const UserProvider = ({ children }) => {
@@ -28,13 +39,26 @@ export const UserProvider = ({ children }) => {
     setIsClicked(!isClicked);
     navigate("/signin");
   }
-
+  /*
+localStorage.setItem("userInfo", JSON.stringify({
+      uid: "",
+      dateCreated: "",
+      firstName: "",
+      lastName: "",
+      fullName: "",
+      displayName:"",
+      email: "",
+      photoURL:"",
+      isFriend: false,
+      isOnline:false
+  }))
+  */
   useEffect(() => {
     const authChanged = onAuthStateChange(async(user) => {
       if (user) {
     //  await setUserOnlineStatus(userInfo, true)
         navigate("/");
-        localStorage.setItem("userInfo", JSON.stringify(user));
+      localStorage.setItem("userInfo", JSON.stringify(user));
         setUserInfo(user);
       } else {
         if (isClicked) {
