@@ -63,10 +63,126 @@ body{
       }
     }
   }
+  .chatbody-main{
+   z-index:10;
+   position:relative;
+   top:5rem;
+   padding:.5rem;
+   .chatbody-friends-chat{
+     display:flex;
+     
+     .chatbody-friends-image{
+       width:30px;
+       height:30px;
+       .chatbody-friends-img{
+         width:100%;
+         height:100%;
+         border-radius:50%;
+         object-fit:cover;
+       }
+     }
+     
+     .chatbody-main-friend-chat{
+       font-size:13px;
+       max-width:120px;
+       background:gray;
+       padding:.6rem;
+       border-radius:0 1rem 1rem 1rem;
+       word-break: break-word;
+       margin-left:.6rem;
+       position:relative;
+       .chatbody-friends-chat-time{
+         font-size:7px;
+         position:absolute;
+         right:1rem;
+         bottom:5px;
+       }
+     }
+   }
+   
+      .chatbody-user-chat{
+     display:flex;
+     margin-left:13rem;
+     margin-top:.3rem;
+     .chatbody-user-image{
+       width:30px;
+       height:30px;
+       
+       .chatbody-user-img{
+         width:100%;
+         height:100%;
+         border-radius:50%;
+         object-fit:cover;
+       }
+     }
+     
+     .chatbody-main-user-chat{
+       font-size:13px;
+       max-width:120px;
+       background:gray;
+       padding:.6rem;
+       border-radius:1rem 0 1rem 1rem;
+       word-break: break-word;
+       margin-right:.6rem;
+       position:relative;
+       .chatbody-user-chat-time{
+         font-size:7px;
+         position:absolute;
+         right:1rem;
+         bottom:5px;
+       }
+     }
+   }
+   }
+
+  .chatbody-footer{
+    position: absolute;
+    z-index:100;
+    bottom:0;
+    left:0;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, .4);
+    background-color: rgba(255, 255, 255, .05);  
+    backdrop-filter: blur(5px);
+    right:0;
+    display:flex;
+    justify-content: space-between;
+    padding:1rem;
+    align-items: center;
+    .chatbody-input-box{
+      
+      
+      width:75%;
+      position: relative;
+      .chatbody-input{
+        width:100%;
+        padding:.7rem;
+        border:none;
+        outline:none;
+        height:20px;
+        border-radius:40px;
+        background:gray;
+        &:focus{
+          background:white;
+        }
+      }
+      
+      .chatbody-inicon-box{
+        position:absolute;
+        right:0;
+        top:50%;
+        transform: translateY(-50%);
+        color:black;
+      }
+    }
+    .chatbody-send-btn{
+      color:white;
+      padding:1rem;
+      background:green;
+      border-radius:50%;
+    }
   }
 }
-
-
+}
 
 @media screen and (min-width:700px) {
   .chatbody-container{

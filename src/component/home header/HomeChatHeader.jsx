@@ -3,18 +3,27 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import "./HomeChatHeader.scss"
 import {useNavigate} from "react-router-dom"
-import {useContext} from "react"
 import BedtimeIcon from '@mui/icons-material/Bedtime';
+import {useContext, useState} from "react"
 import {UserContext} from "/src/context/UserContext"
+import HomeMenu from "/src/component/home menu/HomeMenu"
+import {ToggleContext} from "/src/context/ToggleContext"
+
 export default function HomeChatHeader(){
   const navigate = useNavigate()
   const {userInfo} = useContext(UserContext)
-  
+  const {toggleMenu, setToggleMenu} = useContext(ToggleContext)
   const enableSearch = () => {
     navigate("/search")
   }
-
+  
+const turnOnMenu = (e) =>{
+  e.stopPropagation()
+  setToggleMenu(true)
+}
   return(
+    <>
+    {toggleMenu && <HomeMenu/>}
   <header className="homechat-header">
   <div className="homeheader-bio">
     <BedtimeIcon/>
@@ -29,8 +38,9 @@ export default function HomeChatHeader(){
   <SearchIcon onClick = {enableSearch} className="homeh-icon-search"/>
   
   <CameraAltIcon className="homeh-icon-camera"/>
-  <MoreVertIcon className="homeh-icon-ellips"/>
+  <MoreVertIcon onClick={turnOnMenu}  className="homeh-icon-ellips"/>
   </div>
   </header>
+  </>
   )
 }

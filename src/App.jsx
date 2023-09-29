@@ -19,7 +19,10 @@ function App() {
 <Route path="/chat" element={<ChatBody/>}/>
 <Route path="/search" element={<SearchUsers/>}/>
 <Route path="/friends" element={<AddedFriends/>}/>
+<Route path="/addfriends" element={<SearchUsers/>}/>
+<Route path="/settings" element={<AddedFriends/>}/>
   
+<Route path="/profile" element={<AddedFriends/>}/>
 </Routes>
     </>
   )

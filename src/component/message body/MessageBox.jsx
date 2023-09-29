@@ -1,7 +1,35 @@
 import img from "/src/assets/html.webp"
 import "./MessageBox.scss"
+import ChatBody from "/src/routes/chat body/ChatBody"
+import {useNavigate} from "react-router-dom"
+import {useState, useEffect} from "react"
 
 export default function MessageBox(){
+  const navigate = useNavigate()
+const [smallScreenFunc, setSmallScreenFunc] = useState(null)
+  //const [isClicked, setIsClicked] = useState(false)
+  useEffect(()=>{
+    const messageBody = document.querySelector(".message-container")
+    function resizeScreen(){
+  const screenWidth = window.innerWidth
+  const threshold = 700
+  
+  if(screenWidth <= 700){
+  const navigateToChat = () =>{
+    navigate("/chat")
+  }
+  messageBody.addEventListener("click", navigateToChat)
+  
+  }
+    }
+    resizeScreen()
+  window.addEventListener("resize", resizeScreen)
+ 
+  return () =>{
+    window.removeEventListener("resize", resizeScreen)
+  }
+  }, [])
+  
   
   return (
     <>
