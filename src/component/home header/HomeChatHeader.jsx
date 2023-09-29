@@ -28,8 +28,8 @@ const turnOnMenu = (e) =>{
   <div className="homeheader-bio">
     <BedtimeIcon/>
     <div className="homeheader-bio-divider">
-  <div className="homeheader-name"> {userInfo.displayName}</div>
-  <div className= "homeheader-stat">sleeping</div>
+    <div className="homeheader-name"> {userInfo.displayName}</div>
+    <div className= "homeheader-stat">sleeping</div>
   </div>
   </div>
   

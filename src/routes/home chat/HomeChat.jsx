@@ -9,7 +9,7 @@ import {ToggleContext} from "/src/context/ToggleContext"
 
 export default function HomeChat(){
 const navigate = useNavigate()
-const {setToggleMenu} = useContext(ToggleContext)
+const {setToggleMenu, toggleChat} = useContext(ToggleContext)
 const seeFriends = () =>{
   navigate("/friends")
 }
@@ -21,12 +21,15 @@ const seeFriends = () =>{
         <div className="homechat-divider">
        <div className="homechat-first">
         <HomeChatBody/>
+      <div className="homechat-chat-icon">
+         <ChatIcon className="homechat-chat-icons" onClick={seeFriends}/>
         </div>
+         </div>
         <div className="homechat-second">
-      <ChatBody/>
+        <p style={{position:"absolute", left:"50%", top:"50%", transform:"translate(-50%, -50%)", fontSize:"40px"}}>Keksbot Companies inc.</p>
+        {toggleChat && <ChatBody/>}
         </div>
         </div>
-       <ChatIcon onClick={seeFriends} sx={{position:"fixed", bottom:"40px",  right:"40px", background:"green", padding:"1rem", borderRadius:"50%", fontSize:"30px"}}/>
         </div>
         
         </>

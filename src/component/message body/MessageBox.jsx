@@ -2,19 +2,20 @@ import img from "/src/assets/html.webp"
 import "./MessageBox.scss"
 import ChatBody from "/src/routes/chat body/ChatBody"
 import {useNavigate} from "react-router-dom"
-import {useState, useEffect} from "react"
+import { useEffect, useState, useContext} from "react"
+import { ToggleContext } from "../../context/ToggleContext"
 
 export default function MessageBox(){
   const navigate = useNavigate()
-const [smallScreenFunc, setSmallScreenFunc] = useState(null)
-  //const [isClicked, setIsClicked] = useState(false)
+  const [isClicked, setIsClicked] = useState(false)
+const {setToggleChat} = useContext(ToggleContext)
   useEffect(()=>{
     const messageBody = document.querySelector(".message-container")
     function resizeScreen(){
   const screenWidth = window.innerWidth
   const threshold = 700
   
-  if(screenWidth <= 700){
+  if(screenWidth <= threshold){
   const navigateToChat = () =>{
     navigate("/chat")
   }
@@ -30,10 +31,16 @@ const [smallScreenFunc, setSmallScreenFunc] = useState(null)
   }
   }, [])
   
+ 
+
+const enableChats = () =>{
+  setToggleChat(true)
+}
   
   return (
     <>
-    <div className='message-container'>
+
+    <div className='message-container' onClick={enableChats}>
     <div className="message-image">
     <img src={img} className="message-img" />
     </div>

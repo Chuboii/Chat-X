@@ -113,13 +113,14 @@
       
       .message-name{
         margin-bottom:.5rem;
+        font-size: 15px;
       }
       .message-text{
-        width:130px;
+        width:180px;
         overflow:hidden;
         position:relative;
         height:15px;
-        font-size:12px;
+        font-size:13px;
         word-break:break-word;
         
         &::before{

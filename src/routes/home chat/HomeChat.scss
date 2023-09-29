@@ -18,22 +18,38 @@
 
 @media screen and (min-width:700px) {
   .homechat-main-body{
-    border: 2px solid;
     width: 100%;
    position: absolute;
    top: 0;
    bottom: 0;
+   left: 0;
+   right: 0;
+  
 
     .homechat-divider{
       display: flex;
+
       .homechat-first{
         width: 30%;
-        
+
+        position: relative;
+        .homechat-chat-icon{
+          position: absolute;
+          left: 10px;
+          bottom: 10px;
+        .homechat-chat-icons{
+          font-size: 30px;
+          padding: 1rem;
+          background-color: green;
+          border-radius: 50%;
+        }
+      }
       }
       .homechat-second{
         display:block;
-width: 70%;
-        background-color: red;
+        width: 70%;
+        background-color: black;
+        position: relative;
 
       }
     }
