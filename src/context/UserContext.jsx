@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { auth, onAuthStateChange, signOutUser } from "../utils/firebase/firebase";
+import {  onAuthStateChange, signOutUser } from "../utils/firebase/firebase";
 import { useNavigate } from 'react-router-dom';
 
 export const UserContext = createContext();
@@ -23,7 +23,8 @@ function getUserData() {
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const [isClicked, setIsClicked] = useState(false);
-  const [userInfo, setUserInfo] = useState(getUserData());
+  const [userInfo, setUserInfo] = useState(getUserData);
+  const [loaded, setLoaded] = useState(false)
 
   const triggerSignout = async () => {
     await signOutUser();
@@ -39,27 +40,15 @@ export const UserProvider = ({ children }) => {
     setIsClicked(!isClicked);
     navigate("/signin");
   }
-  /*
-localStorage.setItem("userInfo", JSON.stringify({
-      uid: "",
-      dateCreated: "",
-      firstName: "",
-      lastName: "",
-      fullName: "",
-      displayName:"",
-      email: "",
-      photoURL:"",
-      isFriend: false,
-      isOnline:false
-  }))
-  */
+
+
   useEffect(() => {
     const authChanged = onAuthStateChange(async(user) => {
       if (user) {
-    //  await setUserOnlineStatus(userInfo, true)
         navigate("/");
       localStorage.setItem("userInfo", JSON.stringify(user));
         setUserInfo(user);
+        setLoaded(true)
       } else {
         if (isClicked) {
           navigate("/signup");
@@ -68,13 +57,15 @@ localStorage.setItem("userInfo", JSON.stringify({
         }
       }
     });
+
+  
    
     return () => {
       authChanged();
     }
-  }, [isClicked]);
+  },[]);
 
-  const value = { userInfo, handleSignupLink, handleSigninLink, triggerSignout };
+  const value = { userInfo, handleSignupLink, handleSigninLink, triggerSignout, loaded };
   
 
   return (

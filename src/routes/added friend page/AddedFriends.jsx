@@ -4,25 +4,17 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './AddeFriends.scss'
 import  VerifiedUser  from '@mui/icons-material/VerifiedUser';
-import img from '/src/assets/html.webp'
 import {doc, getDoc,setDoc,query, getDocs, serverTimestamp, onSnapshot, updateDoc, arrayUnion} from 'firebase/firestore'
 import {UserContext} from "/src/context/UserContext"
 import {db} from '/src/utils/firebase/firebase'
-import {useEffect,useRef,useState, useContext} from "react"
+import {useEffect,useState, useContext} from "react"
 import {useNavigate} from "react-router-dom"
 import FriendSearch from "/src/component/friends search/FriendSearch"
 import {OnSnapshotContext} from "/src/context/OnSnapshotData"
 
 function getData(){
-  const storage = localStorage.getItem("friendsInfo")
-
-return storage ? JSON.parse(storage) : {
-  friendsID: "",
-      friendsName: "",
-      friendsImg: "",
-      friendsOnline: "",
-      friendsPreviewMsg: "",
-}
+  const storaged = localStorage.getItem("friendsInfo")
+return JSON.parse(storaged) 
   
 }
 
@@ -33,14 +25,9 @@ const {userInfo} = useContext(UserContext)
 const navigate = useNavigate()
 const [toggleSearch, setToggleSearch] = useState(false)
 const [val, setVal] = useState("")
-const [friendsInfo, setFriendsInfo] = useState({
-  friendsID: "",
-      friendsName: "",
-      friendsImg: "",
-      friendsOnline: "",
-      friendsPreviewMsg: "",
-})
-const {setPreviewFriendsData, previewFriendsData} = useContext(OnSnapshotContext)
+const [friendsInfo, setFriendsInfo] = useState(getData)
+const [isClicked, setIsClicked] = useState(false)
+const {setPreviewFriendsData} = useContext(OnSnapshotContext)
 
 
 const getFriendsFromDoc = async()=>{
@@ -55,71 +42,6 @@ const getFriendsFromDoc = async()=>{
   setData(filtered)
  }
 }
-
-useEffect(()=>{
-  const getDocFromDb = async () =>{
-    try{
- const friendsPreviewRef = doc(db, "friendsPreviewChat", userInfo.uid)
-  const getDocRef = await getDoc(friendsPreviewRef)
-  
-  if(!getDocRef.exists()){
-      await setDoc(friendsPreviewRef, {
-       messagePreview:[]
-    })
-  }
-    }
-  catch(e){
-    console.log(e)
-  }
-  }
-  getDocFromDb()
-},[])
-/*
-useEffect(()=>{
-  localStorage.setItem("friendsInfo", JSON.stringify({friendsID: "",
-      friendsName: "",
-      friendsImg: "",
-      friendsOnline: "",
-      friendsPreviewMsg: "",
-}))
-},[])*/
-useEffect(()=>{
-  
-async function friendsPreview(){
-  const friendsPreviewRef = doc(db, "friendsPreviewChat", userInfo.uid)
-  const getDocRef = await getDoc(friendsPreviewRef)
-  console.log(friendsInfo)
-  if(getDocRef.exists()){
-    if(friendsInfo.uid !== ""){
-   const updatedData = {
-    messagePreview: arrayUnion({
-      friendsID: friendsInfo.uid,
-      friendsName: friendsInfo.displayName,
-      friendsImg: friendsInfo.photoURL,
-      friendsOnline: friendsInfo.isOnline,
-      friendsPreviewMsg: "",
-    }),
-    
-    
-  };
-  
-   await updateDoc(friendsPreviewRef, updatedData)
-  }
-  }
-}
- friendsPreview()
-}, [friendsInfo])
-
-
-
-function getFriendsPreviewUpdated(){
-const unsub = onSnapshot(doc(db, "friendsPreviewChat", userInfo.uid), (doc) => {
- // console.log(doc.data())
-    setPreviewFriendsData(doc.data())
-})
-}
-
-
 
 useEffect(()=>{
   const getDocFromDb = async()=>{
@@ -137,6 +59,52 @@ useEffect(()=>{
   
 },[data])
 
+
+
+useEffect(() =>{
+  const setFriendsUserDoc = async() =>{
+    const friendsUserRef = doc(db, 'friendsPreview', userInfo.uid)
+ try{
+    const getDocRef = await getDoc(friendsUserRef)
+ 
+ 
+    if(!getDocRef.exists()){
+     await setDoc(friendsUserRef, {
+       messagePreview:[]
+     })
+ 
+ 
+    }
+    else{
+    await updateDoc(friendsUserRef,{
+     messagePreview: arrayUnion({
+      friendsId: friendsInfo.uid,
+      friendsName: friendsInfo.displayName,
+      friendsImage: friendsInfo.photoURL,
+      isOnline: friendsInfo.isOnline,
+     })
+    })
+
+    }
+
+ }
+ catch(e){
+   console.log(e);
+ }
+ 
+ }
+ 
+setFriendsUserDoc()
+
+}, [friendsInfo, userInfo])
+
+useEffect(() =>{
+  localStorage.setItem("friendsInfo", JSON.stringify({uid: "",
+  displayName: "",
+  photoURL: "",
+  isOnline: "",
+  }))
+}, [])
 const backToHome = () =>{
   navigate("/")
 }
@@ -145,17 +113,18 @@ const toggleSearchBtn = () =>{
 }
 
 const selectedUser =  (el) =>{
-// setFriendsInfo(() => el)
- getFriendsPreviewUpdated()
  localStorage.setItem("friendsInfo", JSON.stringify(el))
- if(el){
-   console.log(el)
-   navigate("/chat")
- }
- 
+ setIsClicked(!isClicked)
+ let stored = localStorage.getItem('friendsInfo')
+setFriendsInfo(JSON.parse(stored))
 
+
+ 
 }
 
+if(isClicked){
+  navigate('/chat')
+}
 
 
 
@@ -206,8 +175,8 @@ Add Friends
 
         <main className='added-friends-main'>
        {
-       data.map((el,idx) =>
-        <div key={el.uid} className='added-friends-chat-box' onClick={()=>{
+       data.map((el) =>
+        <div key={el[0].uid} className='added-friends-chat-box' onClick={()=>{
         selectedUser(el[0])
        
         }
