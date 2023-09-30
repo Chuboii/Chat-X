@@ -11,9 +11,24 @@
    .homechat-second{
      display:none;
    }
+   
+   .homechat-first{
+     
+           .homechat-chat-icon{
+          position: absolute;
+          right: 30px;
+          bottom: 30px;
+        .homechat-chat-icons{
+          font-size: 30px;
+          padding: 1rem;
+          background-color: green;
+          border-radius: 50%;
+        }
+      }
    }
    
-   
+
+}
 }
 
 @media screen and (min-width:700px) {

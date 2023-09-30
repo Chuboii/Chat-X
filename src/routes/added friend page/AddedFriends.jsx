@@ -5,18 +5,43 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './AddeFriends.scss'
 import  VerifiedUser  from '@mui/icons-material/VerifiedUser';
 import img from '/src/assets/html.webp'
-import {doc, getDoc, query} from 'firebase/firestore'
+import {doc, getDoc,setDoc,query, getDocs, serverTimestamp, onSnapshot, updateDoc, arrayUnion} from 'firebase/firestore'
 import {UserContext} from "/src/context/UserContext"
 import {db} from '/src/utils/firebase/firebase'
-import {useEffect, useState, useContext} from "react"
+import {useEffect,useRef,useState, useContext} from "react"
 import {useNavigate} from "react-router-dom"
 import FriendSearch from "/src/component/friends search/FriendSearch"
+import {OnSnapshotContext} from "/src/context/OnSnapshotData"
+
+function getData(){
+  const storage = localStorage.getItem("friendsInfo")
+
+return storage ? JSON.parse(storage) : {
+  friendsID: "",
+      friendsName: "",
+      friendsImg: "",
+      friendsOnline: "",
+      friendsPreviewMsg: "",
+}
+  
+}
+
+
 export default function AddedFriends(){
 const [data, setData] = useState([])
 const {userInfo} = useContext(UserContext)
 const navigate = useNavigate()
 const [toggleSearch, setToggleSearch] = useState(false)
 const [val, setVal] = useState("")
+const [friendsInfo, setFriendsInfo] = useState({
+  friendsID: "",
+      friendsName: "",
+      friendsImg: "",
+      friendsOnline: "",
+      friendsPreviewMsg: "",
+})
+const {setPreviewFriendsData, previewFriendsData} = useContext(OnSnapshotContext)
+
 
 const getFriendsFromDoc = async()=>{
  const userFriendsRef = doc(db, "userFriends", userInfo.uid)
@@ -32,7 +57,72 @@ const getFriendsFromDoc = async()=>{
 }
 
 useEffect(()=>{
-  const getDocFromDb = async() =>{
+  const getDocFromDb = async () =>{
+    try{
+ const friendsPreviewRef = doc(db, "friendsPreviewChat", userInfo.uid)
+  const getDocRef = await getDoc(friendsPreviewRef)
+  
+  if(!getDocRef.exists()){
+      await setDoc(friendsPreviewRef, {
+       messagePreview:[]
+    })
+  }
+    }
+  catch(e){
+    console.log(e)
+  }
+  }
+  getDocFromDb()
+},[])
+/*
+useEffect(()=>{
+  localStorage.setItem("friendsInfo", JSON.stringify({friendsID: "",
+      friendsName: "",
+      friendsImg: "",
+      friendsOnline: "",
+      friendsPreviewMsg: "",
+}))
+},[])*/
+useEffect(()=>{
+  
+async function friendsPreview(){
+  const friendsPreviewRef = doc(db, "friendsPreviewChat", userInfo.uid)
+  const getDocRef = await getDoc(friendsPreviewRef)
+  console.log(friendsInfo)
+  if(getDocRef.exists()){
+    if(friendsInfo.uid !== ""){
+   const updatedData = {
+    messagePreview: arrayUnion({
+      friendsID: friendsInfo.uid,
+      friendsName: friendsInfo.displayName,
+      friendsImg: friendsInfo.photoURL,
+      friendsOnline: friendsInfo.isOnline,
+      friendsPreviewMsg: "",
+    }),
+    
+    
+  };
+  
+   await updateDoc(friendsPreviewRef, updatedData)
+  }
+  }
+}
+ friendsPreview()
+}, [friendsInfo])
+
+
+
+function getFriendsPreviewUpdated(){
+const unsub = onSnapshot(doc(db, "friendsPreviewChat", userInfo.uid), (doc) => {
+ // console.log(doc.data())
+    setPreviewFriendsData(doc.data())
+})
+}
+
+
+
+useEffect(()=>{
+  const getDocFromDb = async()=>{
     try{
  
     await getFriendsFromDoc()
@@ -53,6 +143,24 @@ const backToHome = () =>{
 const toggleSearchBtn = () =>{
   setToggleSearch(true)
 }
+
+const selectedUser =  (el) =>{
+// setFriendsInfo(() => el)
+ getFriendsPreviewUpdated()
+ localStorage.setItem("friendsInfo", JSON.stringify(el))
+ if(el){
+   console.log(el)
+   navigate("/chat")
+ }
+ 
+
+}
+
+
+
+
+
+
     return (
       <>
  
@@ -98,13 +206,17 @@ Add Friends
 
         <main className='added-friends-main'>
        {
-       data.map(el =>
-        <div className='added-friends-chat-box'>
+       data.map((el,idx) =>
+        <div key={el.uid} className='added-friends-chat-box' onClick={()=>{
+        selectedUser(el[0])
+       
+        }
+        }>
         <div className='added-friends-image'>
         <img src={el[0].photoURL} className='added-friends-img'/>
         </div>
         <div className='added-friends-user-info'>
-        <p className='added-friends-user-name'>
+        <p  className='added-friends-user-name'>
         {el[0].displayName}
         </p>
         <p className='added-friends-user-stat'>
