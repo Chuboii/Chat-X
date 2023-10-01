@@ -3,16 +3,11 @@ import {createContext, useState} from "react"
 export const OnSnapshotContext = createContext()
 
 export const OnSnapshotProvider = ({children}) =>{
-  const [previewFriendsData, setPreviewFriendsData] = useState({
-     friendsID: "",
-      friendsName: "",
-      friendsImg: "",
-      friendsOnline: "",
-      friendsPreviewMsg: "",
-      dateSent: ""
+  const [friendChatInfo, setFriendChatInfo] = useState({
+    photoURL:""
   })
   
-  const value = {previewFriendsData, setPreviewFriendsData}
+  const value = {friendChatInfo, setFriendChatInfo}
   
   return (
     <OnSnapshotContext.Provider value={value}>

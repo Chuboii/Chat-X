@@ -26,9 +26,6 @@ const navigate = useNavigate()
 const [toggleSearch, setToggleSearch] = useState(false)
 const [val, setVal] = useState("")
 const [friendsInfo, setFriendsInfo] = useState(getData)
-const [isClicked, setIsClicked] = useState(false)
-const {setPreviewFriendsData} = useContext(OnSnapshotContext)
-
 
 const getFriendsFromDoc = async()=>{
  const userFriendsRef = doc(db, "userFriends", userInfo.uid)
@@ -65,6 +62,7 @@ useEffect(() =>{
   const setFriendsUserDoc = async() =>{
     const friendsUserRef = doc(db, 'friendsPreview', userInfo.uid)
  try{
+
     const getDocRef = await getDoc(friendsUserRef)
  
  
@@ -75,17 +73,19 @@ useEffect(() =>{
  
  
     }
-    else{
-    await updateDoc(friendsUserRef,{
-     messagePreview: arrayUnion({
-      friendsId: friendsInfo.uid,
-      friendsName: friendsInfo.displayName,
-      friendsImage: friendsInfo.photoURL,
-      isOnline: friendsInfo.isOnline,
-     })
-    })
+    // else{
 
-    }
+    // await updateDoc(friendsUserRef,{
+    //  messagePreview: arrayUnion({
+    //   friendsId: friendsInfo.uid,
+    //   friendsName: friendsInfo.displayName,
+    //   friendsImage: friendsInfo.photoURL,
+    //   isOnline: friendsInfo.isOnline,
+    //  })
+    // })
+
+
+    // }
 
  }
  catch(e){
@@ -112,19 +112,68 @@ const toggleSearchBtn = () =>{
   setToggleSearch(true)
 }
 
-const selectedUser =  (el) =>{
+const selectedUser = async (el) =>{
  localStorage.setItem("friendsInfo", JSON.stringify(el))
- setIsClicked(!isClicked)
+ localStorage.setItem("friendsChatInfo", JSON.stringify(el))
  let stored = localStorage.getItem('friendsInfo')
 setFriendsInfo(JSON.parse(stored))
+const conversationRef = doc(db, 'conversations', `${userInfo.uid}-${el.uid}`)
 
+try{
+  
+   const getDocRef = await getDoc(conversationRef)
+
+
+   if(!getDocRef.exists()){
+    await setDoc(conversationRef, {
+      messages: {
+      userChats: [],
+      friendsChats: []
+      }
+    })
+
+    navigate('/chat')
+
+   }
+   else{
+     navigate('/chat')
+   }
+
+
+   const friendsUserRef = doc(db, 'friendsPreview', userInfo.uid)
+  
+   const getFriendsDocRef = await getDoc(friendsUserRef)
+ 
+ 
+   if(!getFriendsDocRef.exists()){
+    await setDoc(friendsUserRef, {
+      messagePreview:[]
+    })
+
+
+   }
+   else{
+
+   await updateDoc(friendsUserRef,{
+    messagePreview: arrayUnion({
+     friendsId: el.uid,
+     friendsName: el.displayName,
+     friendsImage: el.photoURL,
+     isOnline: false,
+    })
+   })
+
+
+   }
+ }
+ catch(e){
+   console.log(e);
+ }
 
  
 }
 
-if(isClicked){
-  navigate('/chat')
-}
+
 
 
 

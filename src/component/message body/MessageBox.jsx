@@ -2,7 +2,7 @@ import "./MessageBox.scss"
 import {useNavigate} from "react-router-dom"
 import { useEffect, useState, useContext} from "react"
 import { ToggleContext } from "../../context/ToggleContext"
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, getDoc, setDoc } from "firebase/firestore";
 import {db} from "/src/utils/firebase/firebase"
 import {OnSnapshotContext} from "/src/context/OnSnapshotData"
 import {UserContext} from "/src/context/UserContext"
@@ -13,14 +13,18 @@ function getData() {
   return storage ? JSON.parse(storage) : {messagePreview:[{}]}
 }
 
+function getFriendConvo() {
+  let stored = localStorage.getItem("friendConvo")
+  return stored ? JSON.parse(stored) : {}
+}
 
 export default function MessageBox(){
   const navigate = useNavigate()
 const {setToggleChat} = useContext(ToggleContext)
 const {userInfo, loaded} = useContext(UserContext)
 const [getFriendsInfo, setGetFriendsInfo] = useState(null)
-
-
+const [friendConvoInfo, setFriendConvoInfo] = useState(getFriendConvo())
+const [isClicked, setIsClicked] = useState(false)
 
   useEffect(()=>{
     const messageBody = document.querySelectorAll(".message-container")
@@ -57,11 +61,68 @@ if(loaded){
   
 }, [userInfo, getFriendsInfo])
 
-const enableChats = (idx) =>{
-  
-  const filtered =   getFriendsInfo.messagePreview.filter(el => el.friendsId === idx)
-  console.log(filtered);
+
+// useEffect(()=>{
+//   if(loaded){
+//     if(friendConvoInfo){
+//   const setConversation = async() =>{
+//     const conversationRef = doc(db, 'conversations', `${userInfo.uid}-${friendConvoInfo.friendsId}`)
+//  try{
+//     const getDocRef = await getDoc(conversationRef)
+ 
+ 
+//     if(!getDocRef.exists()){
+//      await setDoc(conversationRef, {
+//        usersMessage:[],
+//       friendMessage:[]
+//      })
+ 
+ 
+//     }
+//   }
+//   catch(e){
+//     console.log(e);
+//   }
+// }
+// setConversation()
+// }
+//   }
+// },[isClicked, friendConvoInfo])
+
+const enableChats = async (el) =>{
+  setIsClicked(true)
+
+localStorage.setItem("friendsChatInfo", JSON.stringify(el))
+
+localStorage.setItem("friendConvo", JSON.stringify(el))
+const getConvo = localStorage.getItem("friendConvo")
+setFriendConvoInfo(JSON.parse(getConvo))
 setToggleChat(true)
+
+    const conversationRef = doc(db, 'conversations', `${userInfo.uid}-${el.friendsId}`)
+ try{
+    const getDocRef = await getDoc(conversationRef)
+ 
+ 
+    if(!getDocRef.exists()){
+     await setDoc(conversationRef, {
+      messages: {
+        usersChat:[],
+          friendsChat:[]
+        }
+     })
+ 
+     navigate('/chat')
+ 
+    }
+    else{
+      navigate('/chat')
+    }
+  }
+  catch(e){
+    console.log(e);
+  }
+
 }
 
 
@@ -76,7 +137,7 @@ setToggleChat(true)
   getFriendsInfo ?
   getFriendsInfo.messagePreview.slice().reverse().map(el =>    
    <div key={el.friendsId}  className='message-container' onClick={() =>{
-    enableChats(el.friendsId)
+    enableChats(el)
    }}>
     <div className="message-image">
     <img src={el.friendsImage}  className="message-img" />
@@ -109,7 +170,7 @@ setToggleChat(true)
   
   )
  : ""
- }
+  }
     </>
     )
 }
