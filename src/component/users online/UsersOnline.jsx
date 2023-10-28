@@ -3,7 +3,6 @@ import "./UsersOnline.scss"
 import {useContext, useEffect} from "react"
 import {UserContext} from "/src/context/UserContext"
 import {doc, onSnapshot, collection} from "firebase/firestore"
-import {db} from "/src/utils/firebase/firebase"
 
 export default function UsersOnline(){
 let {userInfo} = useContext(UserContext)

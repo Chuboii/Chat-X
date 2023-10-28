@@ -1,6 +1,6 @@
 import { useForm} from "react-hook-form"
 import TextField from '@mui/material/TextField';
-import { auth, createUserDocRef, storage, createUserWithEmailAndPass, signInWithGooglePopup } from "../../utils/firebase/firebase";
+import { auth, storage, createUserWithEmailAndPass, signInWithGooglePopup } from "../../utils/firebase/firebase";
 import './Signout.css'
 import signupImg from '/src/assets/html.webp'
 import {useContext, useState, useEffect} from "react"
@@ -63,7 +63,7 @@ const googleBtn = async () =>{
  const lastName = user.displayName.split("").splice(findSpace, user.displayName.length)
  
   const other = [[firstName.join("")], [lastName.join("")], [user.displayName]]
-    await createUserDocRef(user, other)
+    
     if(user){
       navigate("/")
     }

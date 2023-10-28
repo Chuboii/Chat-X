@@ -7,7 +7,7 @@ import  VerifiedUser  from '@mui/icons-material/VerifiedUser';
 import img from '/src/assets/html.webp'
 import {doc, getDoc, query} from 'firebase/firestore'
 import {UserContext} from "/src/context/UserContext"
-import {db} from '/src/utils/firebase/firebase'
+
 import {useEffect, useState, useContext} from "react"
 import {useNavigate} from "react-router-dom"
 import FriendSearch from "/src/component/friends search/FriendSearch"
@@ -18,39 +18,7 @@ const navigate = useNavigate()
 const [toggleSearch, setToggleSearch] = useState(false)
 const [val, setVal] = useState("")
 
-const getFriendsFromDoc = async()=>{
- const userFriendsRef = doc(db, "userFriends", userInfo.uid)
- const getDocRef = await getDoc(userFriendsRef)
- if(getDocRef.exists()){
-   const dataRef = getDocRef.data()
-   const filteredData = dataRef.friends.filter((el,idx) => idx > 0)
-  const filtered = filteredData.filter(el =>{
-    return el[0].displayName.toLowerCase().includes(val.toLowerCase())
-  })
-  setData(filtered)
- }
-}
-
-useEffect(()=>{
-  const getDocFromDb = async() =>{
-    try{
- 
-    await getFriendsFromDoc()
-   
-    }
-    catch(e){
-      console.log(e)
-    }
-  }
-  getDocFromDb()
-  
-  
-},[data])
-
-const backToHome = () =>{
-  navigate("/")
-}
-const toggleSearchBtn = () =>{
+const  toggleSearchBtn = () => {
   setToggleSearch(true)
 }
     return (
