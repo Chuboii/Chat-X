@@ -13,9 +13,9 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import {updateProfile} from "firebase/auth"
 import DarkBg from "/src/component/dark bg/DarkBg"
 import Loader from "/src/component/loader/Loader"
-import {useNavigate} from "react-router-dom"
+import {useNavigate, Link} from "react-router-dom"
 export default function Signup(){
-const {handleSigninLink} = useContext(UserContext)
+//const {handleSigninLink} = useContext(UserContext)
 const {register,handleSubmit, formState:{errors}} = useForm({mode:"onChange"})
 const {isValidationToggled, setErrMessage, setIsValidationToggled} = useContext(AlertContext)
 const [imageUrl, setImageUrl] = useState(null)
@@ -177,7 +177,7 @@ uploadTask.on('state_changed',
 <TextField 
 InputProps={{
     style: {
-      color: 'white',
+      color: 'black',
     },
   }}  
   InputLabelProps={{
@@ -197,7 +197,7 @@ label="First Name" variant="outlined"  name="firstName"  {...register("firstName
 <TextField 
 InputProps={{
     style: {
-      color: 'white',
+      color: 'black',
     },
   }}  
   InputLabelProps={{
@@ -217,7 +217,7 @@ label="Last Name" variant="outlined"  name="lastName"  {...register("lastName", 
 <TextField
 InputProps={{
     style: {
-      color: 'white',
+      color: 'black',
     },
   }}  
   InputLabelProps={{
@@ -236,7 +236,7 @@ InputProps={{
 <TextField 
 InputProps={{
     style: {
-      color: 'white',
+      color: 'black',
     },
   }}  
   InputLabelProps={{
@@ -254,7 +254,7 @@ type="password" label="Password" variant="outlined"  {...register("password", re
 
 <TextField InputProps={{
     style: {
-      color: 'white',
+      color: 'black',
     },
   }}  
   InputLabelProps={{
@@ -277,7 +277,7 @@ type="password" label="Password" variant="outlined"  {...register("password", re
 <GoogleIcon className="signup-google" type="button" onClick={googleBtn}/>
 </div>
 
-    <p className="signup-acct">Already got an account? <button type="button" className="signup-link" onClick={handleSigninLink} >Sign in</button></p>
+    <p className="signup-acct" style={{color:"black", fontSize:"11px"}}>Already got an account? <Link to={"/signin"} >Sign in</Link></p>
 </div>
         </form>
         </>

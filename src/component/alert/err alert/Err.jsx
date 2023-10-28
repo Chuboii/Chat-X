@@ -13,10 +13,10 @@ export default function Err(){
  
  return(
     <div className="err-container">
-    <CloseIcon className="err-times" onClick={toggleValidationErr}/>
+    <CloseIcon  className="err-times" onClick={toggleValidationErr}/>
    
     <div className='err-icon-div'>
-    <ErrorIcon sx={{fontSize:"40px", color:""}}/>
+    <ErrorIcon sx={{fontSize:"40px", color:"orangered"}}/>
     <p>{errMessage}</p>
     </div>
     </div> 

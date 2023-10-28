@@ -21,6 +21,10 @@ const [val, setVal] = useState("")
 const  toggleSearchBtn = () => {
   setToggleSearch(true)
 }
+
+const backToHome = () =>{
+  
+}
     return (
       <>
  
@@ -65,8 +69,7 @@ Add Friends
         </div>
 
         <main className='added-friends-main'>
-       {
-       data.map(el =>
+       {data ? data.map(el =>(
         <div className='added-friends-chat-box'>
         <div className='added-friends-image'>
         <img src={el[0].photoURL} className='added-friends-img'/>
@@ -79,8 +82,8 @@ Add Friends
         sleeping
         </p>
         </div>
-        </div>
-     )  }
+       </div>
+     ) ):"" }
         </main>
         </div>
 

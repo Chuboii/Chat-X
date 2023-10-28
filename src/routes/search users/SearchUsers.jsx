@@ -10,13 +10,11 @@ export default function SearchUsers(){
  const [lastNameSearch, setLastNameSearch] = useState("")
  const [fullNameSearch, setFullNameSearch] = useState("")
  const [value, setValue] = useState("")
- const [user, setUser] = useState([])
+ const [user, setUser] = useState(null)
 const {userInfo} = useContext(UserContext)
 const [addUser, setAddUser] = useState([])
 const [hasUserAdded, setHasUserAdded] = useState(false)
 
- const db = getFirestore()
- 
  
  const changeValue = (e)=>{
    setValue(e.target.value)

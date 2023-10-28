@@ -8,6 +8,22 @@
      bottom:0;
      left:0;
      right:0;
+     
+      .homechat-first{
+        
+       // position: relative;
+        .homechat-chat-icon{
+          position: absolute;
+          right: 10px;
+          bottom: 10px;
+        .homechat-chat-icons{
+          font-size: 30px;
+          padding: 1rem;
+          background-color: green;
+          border-radius: 50%;
+        }
+      }
+      }
    .homechat-second{
      display:none;
    }

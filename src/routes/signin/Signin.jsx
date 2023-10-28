@@ -12,7 +12,7 @@ import {AlertContext} from "/src/context/AlertContext"
 
 export default function Signin(){
     const {register,handleSubmit, formState:{errors}} = useForm({mode:"onChange"})
-    const {handleSignupLink} = useContext(UserContext)
+ //   const {handleSignupLink} = useContext(UserContext)
    const {isValidationToggled, setErrMessage, setIsValidationToggled} = useContext(AlertContext)
  
    
@@ -99,7 +99,7 @@ InputProps={{
 <button className="signin-btn">Sign in</button>
 <GoogleIcon className="signin-google" type="button" onClick={googleBtn}/>
 </div>
-<p className="signin-acct">{acct} <button type="button" className="signin-link" onClick={handleSignupLink}>Sign up</button></p>
+<p className="signin-acct">{acct} <Link to={"/signup"}>Sign up</Link></p>
 </div>
 
         </form>
