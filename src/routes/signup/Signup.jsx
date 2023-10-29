@@ -1,7 +1,7 @@
 import { useForm} from "react-hook-form"
 import TextField from '@mui/material/TextField';
-import { auth, storage, createUserWithEmailAndPass, signInWithGooglePopup } from "../../utils/firebase/firebase";
-import './Signout.css'
+import { auth, createUserWithEmailAndPass, signInWithGooglePopup } from "../../utils/firebase/firebase";
+import './Signup.scss'
 import signupImg from '/src/assets/html.webp'
 import {useContext, useState, useEffect} from "react"
 import {UserContext} from "/src/context/UserContext"
@@ -14,8 +14,11 @@ import {updateProfile} from "firebase/auth"
 import DarkBg from "/src/component/dark bg/DarkBg"
 import Loader from "/src/component/loader/Loader"
 import {useNavigate, Link} from "react-router-dom"
+import {db, storage} from "../../utils/appwrite/appwrite"
+import {v4 as uuidv4} from "uuid"
+import SettingUp from "/src/routes/setting up/SettingUp"
 export default function Signup(){
-//const {handleSigninLink} = useContext(UserContext)
+const {setUserInfo} = useContext(UserContext)
 const {register,handleSubmit, formState:{errors}} = useForm({mode:"onChange"})
 const {isValidationToggled, setErrMessage, setIsValidationToggled} = useContext(AlertContext)
 const [imageUrl, setImageUrl] = useState(null)
@@ -23,13 +26,9 @@ const [done, setDone] = useState(false)
 const [googleOtherParams, setGoogleOtherParams] = useState([])
 const navigate = useNavigate()
 const registerOptions = {
-    firstName:
+    fullName:
     {
-    required: "You must provide a first name"
-    },
-  lastName:
-    {
-    required: "You must provide a last name"
+    required: "You must provide a firstname"
     },
     email: {
         required: "You must a provide an email",
@@ -54,39 +53,39 @@ const registerOptions = {
 }
 
 const googleBtn = async () =>{
+  try{
     const {user} = await signInWithGooglePopup()
+   
+   localStorage.setItem("xChatUserInfo", JSON.stringify(user))
+   const userStorage = localStorage.getItem("xChatUserInfo")
+   setUserInfo(storage ? JSON.parse(userStorage) : null)
+   
     await updateProfile(user, {
     photoURL: user.photoURL,
   })
-  const findSpace = user.displayName.split("").indexOf(" ")
-  const firstName = user.displayName.split("").splice(0, findSpace)
- const lastName = user.displayName.split("").splice(findSpace, user.displayName.length)
- 
-  const other = [[firstName.join("")], [lastName.join("")], [user.displayName]]
+  /*
+  const getExistingUser  = await db.getDocument("653d5e27b809bb998478","653d5e2e06524e9b0510", user.uid)
+  
+  localStorage.setItem("xChatUserInfo", getExistingUser.user)
+   const storage2 = localStorage.getItem("xChatUserInfo")
+   setUserInfo(storage ? JSON.parse(storage2) : null)
+   */
+  
+ setTimeout(()=>{
+     navigate("/")
+    }, 2000)
     
-    if(user){
-      navigate("/")
+  }
+  catch(e){
+    console.log(e)
+    if(e.code === 404){
+      navigate("/setting+up")
+      
     }
+  }
 }
 
 
-useEffect(()=>{
-  const fileInput = document.querySelector(".signup-file"); // Assuming you have an input element of type file in your HTML
-
-fileInput.addEventListener('change', function(event) {
-  const file = event.target.files[0];
- 
-  const reader = new FileReader();
-
-  reader.onload = function(event) {
-
-  };
-
- reader.readAsDataURL(file)
- setImageUrl(file)
-});
-
-},[])
 
 
 const submitForm = async (data)=>{
@@ -94,61 +93,23 @@ const submitForm = async (data)=>{
   if(data.password === data.confirmPassword){
   try{
    const {user} = await createUserWithEmailAndPass(auth, data.email, data.password)
-   let firstName = data.firstName
-   let lastName = data.lastName
-   let email = data.email
-   let displayName = `${firstName} ${lastName}`
-   const fullName = [displayName]
-  const additionalNames = [[firstName], [lastName], fullName]
+   
+await updateProfile(user, {
+    displayName: data.fullName
+  })
   
-  const storageRef = ref(storage, `${displayName} ${user.uid}`);
+localStorage.setItem("xChatUserInfo", JSON.stringify(user))
+   const userStorage = localStorage.getItem("xChatUserInfo")
+  
+   setUserInfo(userStorage ? JSON.parse(userStorage) : null)
+  
+ setTimeout(()=>{
+    navigate("/setting+up")
+    }, 2000)
 
-const uploadTask = uploadBytesResumable(storageRef, imageUrl);
-
-uploadTask.on('state_changed', 
-  (snapshot) => {
-
-    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    console.log('Upload is ' + progress + '% done');
-
-    switch (snapshot.state) {
-      case 'paused':
-        console.log('Upload is paused');
-        break;
-      case 'running':
-        console.log('Upload is running');
-        console.log(progress)
-        setDone(true)
-        if(progress === 100){
-          setDone(false)
-        }
-        break;
-    }
-  }, 
-  (error) => {
-    // Handle unsuccessful uploads
-  }, 
-  () => {
-    getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
-      console.log('File available at', downloadURL);
-      if(downloadURL){
-     await updateProfile(user, {
-    displayName,
-    email,
-    photoURL: downloadURL
-     })
-     await createUserDocRef(user, additionalNames)
-     
-      }
-      
-    })
-  }
-)
- 
-
- 
   }
   catch(e){
+    console.log(e)
     if(e.code === "auth/email-already-in-use"){
       setIsValidationToggled(true)
       setErrMessage("Email already in use")
@@ -161,123 +122,60 @@ uploadTask.on('state_changed',
   }
 }
 
+
+
+
+
     return (
       <>
+      
       {done && <Loader/>}
       {done && <DarkBg/>}
       {isValidationToggled && <Err/>}
+
         <form onSubmit={handleSubmit(submitForm)} className="signup-form">
+           <h2 style={{textAlign:"center", marginBottom:"2rem"}}>Join xChat </h2>
         <div className="signup-image">
         <img className="signup-img" src={signupImg}/>
         </div>
-        <div className="inputs">
-<div className="signup-firstn">
+        
+        <div className="su-inp-groups">
+<div className="signup-box">
+<label className="su-label"> Fullname</label>
+<input name="fullName" className="su-inp"  {...register("fullName", registerOptions.fullName)} />
 
-
-<TextField 
-InputProps={{
-    style: {
-      color: 'black',
-    },
-  }}  
-  InputLabelProps={{
-    style: {
-      color: 'black',
-    },
-  }}
-label="First Name" variant="outlined"  name="firstName"  {...register("firstName", registerOptions.firstName)} />
-
-
-{errors.firstName && <p className="signup-err">{errors.firstName.message}</p>}
-</div>
-
-<div className="signup-firstn">
-
-
-<TextField 
-InputProps={{
-    style: {
-      color: 'black',
-    },
-  }}  
-  InputLabelProps={{
-    style: {
-      color: 'black',
-    },
-  }}
-label="Last Name" variant="outlined"  name="lastName"  {...register("lastName", registerOptions.lastName)} />
-
-
-{errors.lastName && <p className="signup-err">{errors.lastName.message}</p>}
+{errors.fullName && <p className="signup-err">{errors.fullName.message}</p>}
 </div>
 
 
-<div className="signup-email">
-
-<TextField
-InputProps={{
-    style: {
-      color: 'black',
-    },
-  }}  
-  InputLabelProps={{
-    style: {
-      color: 'black',
-    },
-  }}
-
- label="Email" variant="outlined" name="email"  {...register("email", registerOptions.email)}/>
+<div className="signup-box">
+<label className="su-label"> Email</label>
+<input className="su-inp" name="email"  {...register("email", registerOptions.email)}/>
 
 {errors.email && <p className="signup-err">{errors.email.message} </p>}
 </div>
 
-<div className='signup-password'>
-
-<TextField 
-InputProps={{
-    style: {
-      color: 'black',
-    },
-  }}  
-  InputLabelProps={{
-    style: {
-      color: 'black',
-    },
-  }}
-type="password" label="Password" variant="outlined"  {...register("password", registerOptions.password)}/>
+<div className='signup-box'>
+<label className="su-label"> Password</label>
+<input className="su-inp" type="password" name="password"  {...register("password", registerOptions.password)}/>
 
 {errors.password && <p className="signup-err">{errors.password.message} </p>}
 </div>
 
 
-<div className="signup-cp">
+<div className="signup-box">
 
-<TextField InputProps={{
-    style: {
-      color: 'black',
-    },
-  }}  
-  InputLabelProps={{
-    style: {
-      color: 'black',
-    },
-  }} type="password"  label="Confirm Password" variant="outlined" name="confirmPassword"  {...register("confirmPassword", registerOptions.confirmPassword)} />
+<label className="su-label"> Confirm Password</label>
+<input className="su-inp" type="password" name="confirmPassword"  {...register("confirmPassword", registerOptions.confirmPassword)} />
 
 {errors.confirmPassword && <p className="signup-err">{errors.confirmPassword.message} </p>}
 </div>
-<div className="signup-avatar">
-<AddImageSvg/>
-<div className="signup-file-box">
-<p>Add an avatar </p>
-<input type="file" accept="image/*" className="signup-file"/>
-</div>
-</div>
 <div className="signup-btn-container">
 <button className="signup-btn">Sign up</button>
-<GoogleIcon className="signup-google" type="button" onClick={googleBtn}/>
+<GoogleIcon className="signup-google" sx={{fontSize:"40px"}} type="button" onClick={googleBtn}/>
 </div>
 
-    <p className="signup-acct" style={{color:"black", fontSize:"11px"}}>Already got an account? <Link to={"/signin"} >Sign in</Link></p>
+    <p className="su-acct-link" style={{color:"white", fontSize:"16px"}}>Already got an account? <Link to={"/signin"} className="su-link" >Sign in</Link></p>
 </div>
         </form>
         </>

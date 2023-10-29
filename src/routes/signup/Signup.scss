@@ -1,0 +1,101 @@
+@media screen and (min-width:0) and (max-width:700px){
+  .signup-form{
+    padding:1rem 2rem;
+   position: absolute;
+    top: 50%;
+    left: 50%;
+    width:100%;
+    display: flex;
+    transform: translate(-50%, -50%);
+    flex-direction: column;
+    .signup-image{
+      display:none;
+    }
+    
+    .su-inp-groups{
+      display:flex;
+      flex-direction:column;
+      width:100%;
+      .signup-box{
+        margin:.5rem 0;
+        .su-label{
+          font-size:15px;
+        }
+     .su-inp{
+       display:flex;
+      flex-direction:column;
+      width:100%;
+      background:transparent;
+      border:none;
+      border-bottom:.5px solid white;
+      outline: none;
+      transition:all .5s;
+      padding:.4rem .3rem;
+      color:white;
+      &:focus{
+        padding:1rem 0;
+      }
+     }
+      }
+    }
+    
+    .signup-avatar{
+      display:flex;
+      align-items:center;
+      position:relative;
+      margin:1rem 0;
+      overflow:hidden;
+      .signup-file{
+        position:absolute;
+        top:50%;
+        opacity:0;
+        transform:translate(-30%, -50%)
+      }
+    }
+    
+    .signup-btn-container{
+      display:flex;
+       margin:auto;
+       align-items: center;
+       .signup-google{
+         margin-left:1rem;
+         background:orangered;
+         padding:.5rem;
+         
+         border-radius:50%;
+       }
+       .signup-btn{
+         background: #007bff;
+         color:white;
+         padding:.7rem 2rem;
+         border:none;
+         border-radius:5px;
+       }
+       
+       }
+       .su-acct-link{
+         color: white;
+         margin-top:3rem;
+        text-align: center;
+        .su-link{
+          color:red;
+          text-decoration:none;
+        }
+       }
+    
+  }
+  
+  
+  
+  
+}
+@media screen and (min-width:700px) {
+  .signup-form{
+    padding:1rem;
+    
+  }
+  
+  
+  
+  
+}

@@ -5,10 +5,13 @@ import {useNavigate} from "react-router-dom"
 import { useEffect, useState, useContext} from "react"
 import { ToggleContext } from "../../context/ToggleContext"
 
+
 export default function MessageBox(){
   const navigate = useNavigate()
   const [isClicked, setIsClicked] = useState(false)
-const {setToggleChat} = useContext(ToggleContext)
+const {setToggleChat, state} = useContext(ToggleContext)
+
+
   useEffect(()=>{
     const messageBody = document.querySelector(".message-container")
     function resizeScreen(){
@@ -34,13 +37,13 @@ const {setToggleChat} = useContext(ToggleContext)
  
 
 const enableChats = () =>{
-  setToggleChat(true)
+  navigate("/chats")
 }
   
   return (
     <>
 
-    <div className='message-container' onClick={enableChats}>
+    <div className='message-container'  style={{borderBottom:`1px solid ${state.toggleBg ? "#00000083" : " #bababa5f"}`}}>
     <div className="message-image">
     <img src={img} className="message-img" />
     </div>
@@ -59,7 +62,7 @@ const enableChats = () =>{
     9:16 AM
     </div>
 
-    <div className="messageBox-online">
+    <div className="messageBox-online" style={{color:`${state.toggleBg ? "#02d902" : "lawngreen"}`}}>
     online
     </div>
     

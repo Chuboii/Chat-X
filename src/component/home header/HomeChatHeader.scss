@@ -10,8 +10,14 @@
     right:0;
     left:0;
     
+    
+    
+    .homeheader-name{
+      font-size:13px;
+    }
+    
     .homeheader-bio{
-      font-size:14px;
+      font-size:12px;
       display:flex;
       .homeheader-bio-divider{
         display: flex;
@@ -24,7 +30,19 @@
     }
     
     .homeheader-icons{
-      
+      display:flex;
+      align-items: center;
+      .hh-cam-box{
+display:flex;
+overflow:hidden;
+width:30px;
+position:relative;
+.hh-inp{
+  opacity:0;
+  position:absolute;
+}
+
+      }
       .homeh-icon-search, .homeh-icon-ellips, .homeh-icon-camera{
         margin-right:1rem;
       }

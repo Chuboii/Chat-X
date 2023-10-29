@@ -1,7 +1,7 @@
 import { useForm} from "react-hook-form"
 import TextField from '@mui/material/TextField'
 import { auth, signInWithEmailAndPass, signInWithGooglePopup} from "../../utils/firebase/firebase";
-import './Signin.css'
+import './Signin.scss'
 import signinImg from '/src/assets/html.webp'
 import { Link } from "react-router-dom";
 import {useContext} from "react"
@@ -9,10 +9,13 @@ import {UserContext} from "/src/context/UserContext"
 import GoogleIcon from '@mui/icons-material/Google';
 import Err from "/src/component/alert/err alert/Err"
 import {AlertContext} from "/src/context/AlertContext"
-
+import {useNavigate} from "react-router-dom"
+import {db} from "/src/utils/appwrite/appwrite"
 export default function Signin(){
     const {register,handleSubmit, formState:{errors}} = useForm({mode:"onChange"})
- //   const {handleSignupLink} = useContext(UserContext)
+    const navigate = useNavigate()
+    const {setUserInfo} = useContext(UserContext)
+    
    const {isValidationToggled, setErrMessage, setIsValidationToggled} = useContext(AlertContext)
  
    
@@ -32,6 +35,12 @@ export default function Signin(){
 const submitForm = async (data) =>{
   try{
   let {user} = await signInWithEmailAndPass(auth, data.email, data.password)
+  
+ localStorage.setItem("xChatUserInfo", JSON.stringify(user))
+   const storage = localStorage.getItem("xChatUserInfo")
+   setUserInfo(storage ? JSON.parse(storage) : null)
+   
+  navigate("/")
   }
   catch(e){
     if(e.code === "auth/invalid-login-credentials"){
@@ -42,8 +51,31 @@ const submitForm = async (data) =>{
    
 }
 
-const googleBtn = async (data) =>{
+const googleBtn = async () =>{
+  try{
     const {user} = await signInWithGooglePopup()
+ console.log(user)
+   localStorage.setItem("xChatUserInfo", JSON.stringify(user))
+   const storage = localStorage.getItem("xChatUserInfo")
+   setUserInfo(storage ? JSON.parse(storage) : null)
+   
+  /*
+ const getExistingUser  = await db.getDocument("653d5e27b809bb998478","653d5e2e06524e9b0510", user.uid)
+ 
+ localStorage.setItem("xChatUserInfo", getExistingUser.user)
+   const storage2 = localStorage.getItem("xChatUserInfo")
+   setUserInfo(storage ? JSON.parse(storage2) : null)
+   
+  */
+ 
+    navigate("/")
+  }
+  catch(e){
+    console.log(e)
+    if(e.code === 404){
+       navigate("/setting+up")
+    }
+  }
 }
 
 
@@ -53,54 +85,32 @@ const acct  = "Don't have an account?"
     return (
       <>
      {isValidationToggled && <Err/>}
-     
+
         <form className="signin-form" onSubmit={handleSubmit(submitForm)}>
+         <h2 style={{marginBottom:"3rem",textAlign:"center"}}> Welcome Back </h2>
         <div className="signin-image">
         <img src={signinImg} className="signin-img"/>
         </div>
-        <div className="sigin-inputs">
-        <div className="signin-email">
-
-<TextField
-InputProps={{
-    style: {
-      color: 'white',
-    },
-  }}  
-  InputLabelProps={{
-    style: {
-      color: 'black',
-    },
-  }}
- label="Email" variant="outlined" name="email"  {...register("email", registerOptions.email)}/>
+        <div className="si-inp-groups">
+<div className='signin-box'>
+<label> Email </label>
+<input className="si-inp"  type="text" name="email" name="email"  {...register("email", registerOptions.email)}/>
 
 {errors.email && <p className="signin-err">{errors.email.message} </p>}
 </div>
 
-<div className='signin-password'>
-
-<TextField InputProps={{
-    style: {
-      color: 'white',
-    },
-  }}  
-  InputLabelProps={{
-    style: {
-      color: 'black',
-    },
-  }}
-  type="password" label="Password" variant="outlined"  {...register("password",registerOptions.password)} />
-
+<div className='signin-box'>
+<label htmlFor=""> Password </label>
+<input className="si-inp"  type="password" name="password"  {...register("password",registerOptions.password)} />
 
 {errors.password && <p className="signin-err">{errors.password.message} </p>}
 </div>
-
+</div>
 <div className="signin-btn-container">
 <button className="signin-btn">Sign in</button>
-<GoogleIcon className="signin-google" type="button" onClick={googleBtn}/>
+<GoogleIcon sx={{fontSize:"40px"}}  className="signin-google" type="button" onClick={googleBtn}/>
 </div>
-<p className="signin-acct">{acct} <Link to={"/signup"}>Sign up</Link></p>
-</div>
+<p className="si-acct-link">{acct} <Link to={"/signup"} className="si-link">Sign up</Link></p>
 
         </form>
         </>

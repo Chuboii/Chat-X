@@ -48,4 +48,3 @@ export const onAuthStateChange = (callback) => onAuthStateChanged(auth, callback
 
 export const signOutUser = () => signOut(auth)
 
-

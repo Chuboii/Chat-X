@@ -15,14 +15,18 @@ export const UserProvider = ({ children }) => {
 
   const triggerSignout = async () => {
     await signOutUser();
-    
+    setUserInfo(null)
+    localStorage.setItem("xChatUserInfo", null)
   }
   
   
   useEffect(() => {
     const authChanged = onAuthStateChange(async(user) => {
       if (user) {
-        
+        localStorage.setItem("xChatUserInfo", JSON.stringify(user))
+      }
+      else{
+        navigate("/signup")
       }
     });
    
@@ -31,7 +35,7 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
-  const value = { userInfo, triggerSignout };
+  const value = { userInfo, setUserInfo, triggerSignout };
   
 
   return (

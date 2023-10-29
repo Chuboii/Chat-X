@@ -2,16 +2,14 @@
 @media screen and (min-width:0) and (max-width:700px){
   .message-container{
     display:flex;
-    padding:1.5rem 1rem ;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, .4);
-      background-color: rgba(255, 255, 255, .15);  
-      backdrop-filter: blur(30px);
-      width:85%;
+    padding:1.5rem .3rem ;
+     width:90%;
       margin:1rem auto;
       border-radius:10px;
       align-items: center;
       margin-bottom:.5rem;
-      
+      position:relative;
+      border-bottom:.5px solid #bababa5f;
     .message-image{
       width:50px;
       height:50px;
@@ -21,6 +19,7 @@
         width:100%;
         height:100%;
         border-radius:100%;
+        object-fit: cover;
       }
     }
     
@@ -59,6 +58,7 @@
       text-align:right;
       display:flex;
       flex-direction: column;
+      
       align-items: flex-end;
     .messageBox-time{
       margin-bottom:.7rem;

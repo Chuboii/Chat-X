@@ -13,13 +13,12 @@ import {useNavigate} from "react-router-dom"
 export default function ChatBody(){
   const navigate = useNavigate()
   
+ const goToHome = () => navigate("/")
   
   return(
     <div className="chatbody-container">
     <header className="chatbody-header">
-    <div className="chatbody-profile-pic" onClick={()=>{
-      navigate("/")
-    }}>
+    <div className="chatbody-profile-pic" onClick={goToHome}>
     <ArrowBackIcon className="chatbody-arrow"/>
     <div className="chatbody-image">
     <img src={img} className="chatbody-img"/>

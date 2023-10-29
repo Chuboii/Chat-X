@@ -4,6 +4,7 @@ import {useState, useEffect} from "react"
 import SearchIcon from '@mui/icons-material/Search';
 import {useContext} from "react"
 import {UserContext} from "/src/context/UserContext"
+import {ToggleContext} from "/src/context/ToggleContext"
 
 export default function SearchUsers(){
  const [firstNameSearch, setFirstNameSearch] = useState("")
@@ -14,7 +15,7 @@ export default function SearchUsers(){
 const {userInfo} = useContext(UserContext)
 const [addUser, setAddUser] = useState([])
 const [hasUserAdded, setHasUserAdded] = useState(false)
-
+ const {toggleMenu,dispatch, state, setToggleMenu} = useContext(ToggleContext)
  
  const changeValue = (e)=>{
    setValue(e.target.value)
@@ -57,7 +58,7 @@ const addFriends = async (idx) => {
 
   return (
 
-    <div className="search-user-container">
+    <div className="search-user-container" style={{background: state.toggleBg ? "white" : "radial-gradient(circle, rgba(27,2,43,1) 0%, rgba(0,0,0,1) 50%)"}}>
 <div className="search-user-divider">   
    <form onSubmit={submitForm} className="search-user-input-container">
     <input placeholder="Search here to meet people..." value={value} onChange={changeValue} type="search" className="search-user-input"/>

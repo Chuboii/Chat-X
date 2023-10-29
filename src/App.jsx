@@ -4,13 +4,14 @@ import Signup from "./routes/signup/Signup"
 import HomeChat from "./routes/home chat/HomeChat"
 import ChatBody from "/src/routes/chat body/ChatBody"
 import SearchUsers from "/src/routes/search users/SearchUsers"
+import "./index.scss"
 import AddedFriends from "./routes/added friend page/AddedFriends"
-
+import SettingUp from "./routes/setting up/SettingUp"
 
 function App() {
  
   return (
-    <>
+    <div className="dark">
   
 <Routes>
 <Route path='/' element={<HomeChat/>}/>
@@ -21,10 +22,11 @@ function App() {
 <Route path="/friends" element={<AddedFriends/>}/>
 <Route path="/addfriends" element={<SearchUsers/>}/>
 <Route path="/settings" element={<AddedFriends/>}/>
-  
+<Route path="/setting+up" element={<SettingUp/>}/>
+
 <Route path="/profile" element={<AddedFriends/>}/>
 </Routes>
-    </>
+    </div>
   )
 }
 
