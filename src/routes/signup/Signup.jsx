@@ -63,13 +63,10 @@ const googleBtn = async () =>{
     await updateProfile(user, {
     photoURL: user.photoURL,
   })
-  /*
+ 
   const getExistingUser  = await db.getDocument("653d5e27b809bb998478","653d5e2e06524e9b0510", user.uid)
   
-  localStorage.setItem("xChatUserInfo", getExistingUser.user)
-   const storage2 = localStorage.getItem("xChatUserInfo")
-   setUserInfo(storage ? JSON.parse(storage2) : null)
-   */
+  
   
  setTimeout(()=>{
      navigate("/")

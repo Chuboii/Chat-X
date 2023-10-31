@@ -11,9 +11,10 @@ import {UserContext} from "/src/context/UserContext"
 import {useEffect, useState, useContext} from "react"
 import {useNavigate} from "react-router-dom"
 import FriendSearch from "/src/component/friends search/FriendSearch"
+import {db} from "/src/utils/appwrite/appwrite"
 export default function AddedFriends(){
 const [data, setData] = useState([])
-const {userInfo} = useContext(UserContext)
+const {userInfo, setXId} = useContext(UserContext)
 const navigate = useNavigate()
 const [toggleSearch, setToggleSearch] = useState(false)
 const [val, setVal] = useState("")
@@ -23,7 +24,26 @@ const  toggleSearchBtn = () => {
 }
 
 const backToHome = () =>{
-  
+  navigate("/")
+}
+
+
+useEffect(()=>{
+  const getFriends = async () =>{
+    const res = await db.getDocument("653d5e27b809bb998478", "653d5e2e06524e9b0510", userInfo.uid)
+    const filtered = JSON.parse(res.user).friends.map(el => el)
+    setData(filtered)
+  }
+  getFriends()
+}, [])
+
+
+const openChat = (idx) =>{
+  console.log(idx)
+  localStorage.setItem("xId",idx)
+  const storage = localStorage.getItem("xId")
+  setXId(storage)
+ navigate("/chat")
 }
     return (
       <>
@@ -70,16 +90,18 @@ Add Friends
 
         <main className='added-friends-main'>
        {data ? data.map(el =>(
-        <div className='added-friends-chat-box'>
+        <div key={el.id} onClick={()=>{
+          openChat(el.userId)
+        }} className='added-friends-chat-box'>
         <div className='added-friends-image'>
-        <img src={el[0].photoURL} className='added-friends-img'/>
+        <img src={el.photoURL} className='added-friends-img'/>
         </div>
         <div className='added-friends-user-info'>
         <p className='added-friends-user-name'>
-        {el[0].displayName}
+        {el.displayName}
         </p>
         <p className='added-friends-user-stat'>
-        sleeping
+        {el.about}
         </p>
         </div>
        </div>

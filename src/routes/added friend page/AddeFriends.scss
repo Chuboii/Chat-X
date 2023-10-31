@@ -67,14 +67,22 @@ align-items: center;
     }
 
     .added-friends-main{
-
+  padding:1rem .5rem;
         .added-friends-chat-box{
             display: flex;
         align-items: center;
-        margin: 1rem 0;
+        margin: 1.5rem 0;
+        .added-friends-user-stat, .added-friends-user-name{
+          font-size: 15px;
+        }
+        .added-friends-user-stat{
+          font-size:13px;
+          color:rgba(255,255,255, .6)
+        }
+        
             .added-friends-image{
-                width: 60px;
-                height: 60px;
+                width: 45px;
+                height: 45px;
                 margin-right: 1rem;
                 .added-friends-img{
                     width: 100%;

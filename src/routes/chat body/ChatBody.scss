@@ -68,9 +68,13 @@ body{
    position:relative;
    top:5rem;
    padding:.5rem;
+   
    .chatbody-friends-chat{
-     display:flex;
      
+     display:flex;
+   flex-direction: column;
+   align-items: flex-start;
+   margin-top:.5rem;
      .chatbody-friends-image{
        width:30px;
        height:30px;
@@ -85,13 +89,56 @@ body{
      .chatbody-main-friend-chat{
        font-size:13px;
        max-width:120px;
+       min-width:100px;
        background:gray;
        padding:.6rem;
+       padding-bottom:1.1rem;
        border-radius:0 1rem 1rem 1rem;
        word-break: break-word;
        margin-left:.6rem;
        position:relative;
+       
        .chatbody-friends-chat-time{
+         font-size:7px;
+         position:absolute;
+         right:.7rem;
+         bottom:3px;
+         display: flex;
+         align-items: center;
+       }
+     }
+     
+
+   }
+   
+   .chatbody-image-box{
+     position: relative;
+ display:flex;
+ margin-top:.5rem;
+     .chatbody-friends-image{
+       width:30px;
+       height:30px;
+       .chatbody-friends-img{
+         width:100%;
+         height:100%;
+         border-radius:50%;
+         object-fit:cover;
+       }
+     }
+     
+      .chatbody-chat-img{
+       
+       word-break: break-word;
+       margin-left:.6rem;
+       position:relative;
+       .chatbody-chat-imgg{
+         width:160px;
+       height:150px;
+       object-fit: cover;
+       
+       border-radius:0 1rem 1rem 1rem;
+       }
+       .chatbody-chat-img-time{
          font-size:7px;
          position:absolute;
          right:1rem;
@@ -99,14 +146,16 @@ body{
        }
      }
    }
-   
       .chatbody-user-chat{
      display:flex;
-     margin-left:13rem;
      margin-top:.3rem;
+     flex-direction: column;
+     align-items: flex-end;
      .chatbody-user-image{
        width:30px;
        height:30px;
+       display:flex;
+       
        
        .chatbody-user-img{
          width:100%;
@@ -119,16 +168,24 @@ body{
      .chatbody-main-user-chat{
        font-size:13px;
        max-width:120px;
+       min-width:100px;
        background:gray;
        padding:.6rem;
+       padding-bottom:1.1rem;
        border-radius:1rem 0 1rem 1rem;
        word-break: break-word;
        margin-right:.6rem;
-       position:relative;
+       position: relative;
+       background:#0000ff88;
+   
+   .chatbody-main-user-chat{
+     text-align: left;
+     color:red;
+   }
        .chatbody-user-chat-time{
          font-size:7px;
          position:absolute;
-         right:1rem;
+         right:.3rem;
          bottom:5px;
        }
      }
@@ -174,9 +231,8 @@ body{
         color:black;
       }
     }
-    .chatbody-send-btn{
-      color:white;
-      padding:1rem;
+    .chatbody-send-btnn{
+      padding:.7rem;
       background:green;
       border-radius:50%;
     }

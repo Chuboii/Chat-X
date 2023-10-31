@@ -1,13 +1,14 @@
 @media screen and (min-width:0) and (max-width:700px){
   .signup-form{
-    padding:1rem 2rem;
+    padding:1rem;
    position: absolute;
     top: 50%;
     left: 50%;
-    width:100%;
+    width:85%;
     display: flex;
     transform: translate(-50%, -50%);
     flex-direction: column;
+    
     .signup-image{
       display:none;
     }

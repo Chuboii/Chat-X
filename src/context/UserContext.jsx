@@ -8,10 +8,15 @@ function getUserInfo(){
   const storage = localStorage.getItem("xChatUserInfo")
 return storage ? JSON.parse(storage) : ""
 }
+function getXId(){
+  const storage = localStorage.getItem("xId")
+return storage ? storage: null
+}
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const [isClicked, setIsClicked] = useState(false);
   const [userInfo, setUserInfo] = useState(getUserInfo);
+const [xId, setXId] = useState(getXId)
 
   const triggerSignout = async () => {
     await signOutUser();
@@ -35,7 +40,7 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
-  const value = { userInfo, setUserInfo, triggerSignout };
+  const value = {xId, setXId, userInfo, setUserInfo, triggerSignout };
   
 
   return (

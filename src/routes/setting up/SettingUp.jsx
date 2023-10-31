@@ -51,12 +51,11 @@ await storage.createFile('653d953494837028fddf', userInfo.uid, imageUrl);
     friends: [],
     about:data.bio,
     username:data.username,
+    isOnline: false,
     userId: userInfo.uid
    })]
  }
-localStorage.setItem("xChatUserInfo", ...userDoc.user)
-   const userStorage = localStorage.getItem("xChatUserInfo")
-   setUserInfo(storage ? JSON.parse(userStorage) : null)
+
    
 //console.log(user)
  await db.createDocument("653d5e27b809bb998478","653d5e2e06524e9b0510", userInfo.uid, userDoc)
