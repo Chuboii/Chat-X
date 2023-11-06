@@ -57,8 +57,11 @@ position:relative;
     justify-content: space-between;
     padding:1.5rem 1rem;
     background:black;
-    width: 100%;
-    height: 30px;
+    width: 30%;
+    position:fixed;
+    top:0;
+    right:0;
+    left:0;
     
     
     .homeheader-bio{
@@ -76,7 +79,18 @@ position:relative;
     }
     
     .homeheader-icons{
-      
+      display:flex;
+      align-items: center;
+      .hh-cam-box{
+display:flex;
+overflow:hidden;
+width:30px;
+position:relative;
+.hh-inp{
+  opacity:0;
+  position:absolute;
+}
+      }
       .homeh-icon-search, .homeh-icon-ellips, .homeh-icon-camera{
         margin-right:1rem;
       }

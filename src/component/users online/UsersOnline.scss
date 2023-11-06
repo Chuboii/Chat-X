@@ -1,48 +1,102 @@
-.useronline-container{
-  height:130px;
-  padding:0 1rem;
-  display:flex;
-  align-items: center;
-  
-    .useronline-user{
-    border-radius:50%;
-    position:relative;
-   width:60px;
-   height:60px;
-    margin-right:1.5rem;
-   display:flex;
-   flex-direction:column;
-    align-items:center;
+@media screen and (min-width:0) and (max-width:700px) {
+  .useronline-container{
+    height:130px;
+    padding:0 1rem;
+    display:flex;
+    align-items: center;
     
-    
-    .useronline-image{
-      height:55px;
-      width:55px;
-      .useronline-img{
-        width:100%;
-        height:100%;
-        object-fit:cover;
-        
+      .useronline-user{
+      border-radius:50%;
+      position:relative;
+     width:60px;
+     height:60px;
+      margin-right:1.5rem;
+     display:flex;
+     flex-direction:column;
+      align-items:center;
+      
+      
+      .useronline-image{
+        height:55px;
+        width:55px;
+        .useronline-img{
+          width:100%;
+          height:100%;
+          object-fit:cover;
+          
+          border-radius:50%;
+        }
+      }
+      .useronline-name{
+        font-size:9px;
+        text-align: center;
+        margin:.5rem 0;
+        padding:0 3rem;
+        bottom:-1.5rem;
+        position: absolute;
+       
+      }
+      .useronline-dot{
+        position:absolute;
+        bottom:0;
+        right:0;
+        width:15px;
+        height:15px;
         border-radius:50%;
+        background:lightgreen;
       }
     }
-    .useronline-name{
-      font-size:9px;
-      text-align: center;
-      margin:.5rem 0;
-      padding:0 3rem;
-      bottom:-1.5rem;
-      position: absolute;
-     
-    }
-    .useronline-dot{
-      position:absolute;
-      bottom:0;
-      right:0;
-      width:15px;
-      height:15px;
+  }
+}
+
+@media screen and (min-width:700px) {
+  .useronline-container{
+    height:130px;
+    padding:0 1rem;
+    display:flex;
+    align-items: center;
+    margin-top: 3.5rem;
+    
+      .useronline-user{
       border-radius:50%;
-      background:lightgreen;
+      position:relative;
+     width:60px;
+     height:60px;
+      margin-right:1.5rem;
+     display:flex;
+     flex-direction:column;
+      align-items:center;
+      
+      
+      .useronline-image{
+        height:55px;
+        width:55px;
+        .useronline-img{
+          width:100%;
+          height:100%;
+          object-fit:cover;
+          
+          border-radius:50%;
+        }
+      }
+      .useronline-name{
+        font-size:9px;
+        text-align: center;
+        margin:.5rem 0;
+        padding:0 3rem;
+        bottom:-1.5rem;
+        position: absolute;
+       
+      }
+      .useronline-dot{
+        position:absolute;
+        bottom:0;
+        right:0;
+        width:15px;
+        height:15px;
+        border-radius:50%;
+        background:lightgreen;
+      }
     }
   }
 }
