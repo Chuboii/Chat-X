@@ -9,23 +9,41 @@
       align-items: center;
       margin-bottom:.5rem;
       position:relative;
+      
       border-bottom:.5px solid #bababa5f;
     .message-image{
       width:50px;
       height:50px;
       margin-right:1.5rem;
-      
+     position:relative;
       .message-img{
         width:100%;
         height:100%;
         border-radius:100%;
         object-fit: cover;
+        
       }
+      .messageBox-unread{
+     margin-top:.4rem;
+     background:red;
+     border-radius:50%;
+     width:15px;
+     height:15px;
+     display:flex;
+     position:absolute;
+     justify-content: center;
+     align-items: center;
+     color:black;
+     font-weight:700;
+     font-size:12px;
+     top:-.4rem;
+     right:-.3rem;
+   }
     }
     
     .message-name-msg{
       font-size:13px;
-      text-transform:capitalize;
+      
       
       .message-name{
         margin-bottom:.5rem;
@@ -34,18 +52,12 @@
         width:180px;
         overflow:hidden;
         position:relative;
-        height:15px;
+        white-space: nowrap;
+        height:26px;
         font-size:12px;
         
-        &::before{
-          content:"...";
-          position:absolute;
-      z-index:4;
-      right:0;
-          color:white;
-          margin-left:.4rem;
-          
-        }
+
+
       }
       
     }
@@ -54,7 +66,7 @@
       position:absolute;
       right:1rem;
       font-size:11px;
-      top:1rem;
+      top:1.8rem;
       text-align:right;
       display:flex;
       flex-direction: column;
@@ -67,17 +79,7 @@
    .messageBox-online{
      color:lawngreen;
    }
-   .messageBox-unread{
-     margin-top:.4rem;
-     background:black;
-     border-radius:50%;
-     width:20px;
-     height:20px;
-     display:flex;
-     justify-content: center;
-     align-items: center;
-     color:lawngreen;
-   }
+   
     }
   }
 }

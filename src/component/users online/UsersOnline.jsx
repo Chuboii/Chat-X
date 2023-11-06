@@ -15,7 +15,7 @@ useEffect(() =>{
   const getUserInfo = async() =>{
     const getExistingUser  = await db.getDocument("653d5e27b809bb998478","653d5e2e06524e9b0510", userInfo.uid)
   setData(getExistingUser.user)
-  console.log(getExistingUser)
+  //console.log(getExistingUser)
   }
   
   getUserInfo()

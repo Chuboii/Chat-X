@@ -12,12 +12,16 @@ function getXId(){
   const storage = localStorage.getItem("xId")
 return storage ? storage: null
 }
+function getXProfile(){
+  const storage = localStorage.getItem("xProfile")
+return storage ? JSON.parse(storage): null
+}
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const [isClicked, setIsClicked] = useState(false);
   const [userInfo, setUserInfo] = useState(getUserInfo);
 const [xId, setXId] = useState(getXId)
-
+const [xProfile, setXProfile] = useState(getXProfile)
   const triggerSignout = async () => {
     await signOutUser();
     setUserInfo(null)
@@ -40,7 +44,7 @@ const [xId, setXId] = useState(getXId)
     }
   }, []);
 
-  const value = {xId, setXId, userInfo, setUserInfo, triggerSignout };
+  const value = {xId, setXId, userInfo, setUserInfo, triggerSignout, xProfile, setXProfile };
   
 
   return (

@@ -11,3 +11,4 @@ client
   export const storage = new Storage(client);
   
   export default client
+

@@ -14,7 +14,7 @@ import FriendSearch from "/src/component/friends search/FriendSearch"
 import {db} from "/src/utils/appwrite/appwrite"
 export default function AddedFriends(){
 const [data, setData] = useState([])
-const {userInfo, setXId} = useContext(UserContext)
+const {userInfo,setXProfile, setXId} = useContext(UserContext)
 const navigate = useNavigate()
 const [toggleSearch, setToggleSearch] = useState(false)
 const [val, setVal] = useState("")
@@ -38,11 +38,14 @@ useEffect(()=>{
 }, [])
 
 
-const openChat = (idx) =>{
+const openChat = (idx,el) =>{
   console.log(idx)
   localStorage.setItem("xId",idx)
+  localStorage.setItem("xProfile", JSON.stringify(el))
   const storage = localStorage.getItem("xId")
   setXId(storage)
+  const storage2 = localStorage.getItem("xProfile")
+  setXProfile(JSON.parse(storage2))
  navigate("/chat")
 }
     return (
@@ -91,7 +94,7 @@ Add Friends
         <main className='added-friends-main'>
        {data ? data.map(el =>(
         <div key={el.id} onClick={()=>{
-          openChat(el.userId)
+          openChat(el.userId, el)
         }} className='added-friends-chat-box'>
         <div className='added-friends-image'>
         <img src={el.photoURL} className='added-friends-img'/>
