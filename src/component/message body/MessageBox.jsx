@@ -16,10 +16,19 @@ const {setToggleChat, state} = useContext(ToggleContext)
 const {userInfo, setXId, setXProfile} = useContext(UserContext)
 const [data, setData] = useState(null)
 const [dataGotten, setDataGotten] = useState(null)
-
+useEffect(()=>{
+  const getData = async () =>{
+    const updatedData = {
+     msgPrev: []
+   }
+  await db.createDocument("653d5e27b809bb998478", "65414b49b5fdab9333dc", userInfo.uid, updatedData) 
+  }
+  getData()
+},[])
 useEffect(()=>{
   const getMsgPrev = async () =>{
    try{
+   
 const res = await db.getDocument("653d5e27b809bb998478", "65414b49b5fdab9333dc", userInfo.uid) 
 const date = new Date()
 const databaseId = "653d5e27b809bb998478"
@@ -124,7 +133,7 @@ const enableChats = (idx, el) =>{
   setXProfile(JSON.parse(storage2))
   navigate("/chat")
 }
-  
+  console.log(data)
   return (
     <>
     
@@ -167,7 +176,7 @@ const extract = `${hr}:${mins}`
     </div>
 
     <div className="messageBox-online" style={{color:`${state.toggleBg ? "#02d902" : "lawngreen"}`}}>
-    onlime
+    online
     </div>
     
 

@@ -460,7 +460,7 @@ const increImage = (idx) =>{
     
     <div className="chatbody-descript">
     <div className="chatbody-name"> {xProfile.displayName}</div>
-    <div className="chatbody-online"> {otherUserIsTyping ? "Typing" : "Online"} </div>
+    <div className="chatbody-online" style={{fontSize:"10px", color:"lawngreen"}}> {otherUserIsTyping ? "Typing" : "Online"} </div>
     </div>
     
     <div className="chatbody-icons">
