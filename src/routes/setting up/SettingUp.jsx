@@ -8,6 +8,7 @@ import AddImageSvg from "/src/component/svgs/AddImageSvg"
 import {db, storage} from "../../utils/appwrite/appwrite"
 import {v4 as uuidv4} from "uuid"
 import {updateProfile} from "firebase/auth"
+import Bg from "/src/component/bg/Bg"
 
 export default function SettingUp(){
   const {register,handleSubmit, formState:{errors}} = useForm({mode:"onChange"})
@@ -15,12 +16,12 @@ export default function SettingUp(){
     const {setUserInfo, userInfo} = useContext(UserContext)
     const [imageUrl, setImageUrl] = useState(null)
    const {isValidationToggled, setErrMessage, setIsValidationToggled} = useContext(AlertContext)
+   const [done, setDone] = useState(false)
   
    
     const registerOptions = {
         username: {
-            required: "You must a provide an username",
-         
+            required: "You must a provide an username"
         },
         bio:{
             required: "You must provide a bio",
@@ -33,14 +34,15 @@ export default function SettingUp(){
   
   
 const submitForm = async (data) =>{
-  
+  setDone(true)
  try{
   
 await storage.createFile('653d953494837028fddf', userInfo.uid, imageUrl);
   const imgHref = await storage.getFileView("653d953494837028fddf", userInfo.uid);
 //console.log(imgHref)
      const date = new Date()
-     
+  
+
  const userDoc = {
    user: [JSON.stringify({
     id: uuidv4(),
@@ -60,9 +62,11 @@ await storage.createFile('653d953494837028fddf', userInfo.uid, imageUrl);
 //console.log(user)
  await db.createDocument("653d5e27b809bb998478","653d5e2e06524e9b0510", userInfo.uid, userDoc)
  navigate("/")
+ setDone(false)
  console.log("done")
  }
  catch(e){
+   setDone(false)
    console.log(e)
  }
 }
@@ -74,13 +78,14 @@ const uploadImage = (e) =>{
 
   return(
 <>
+{done &&  <Bg/>}
 <div className="settingup-container">
 <h3 style={{textAlign:"center", marginBottom:"2.5rem"}}> Almost Done! </h3>
 <form className="seu-form" onSubmit={handleSubmit(submitForm)}>
 <div className="seu-box">
 <label className="seu-lab"> Username </label>
 <input type="text" name="username" className="seu-inp"  {...register("username", registerOptions.username)}/>
-{errors.username && <p className="signup-err">{errors.email.username} </p>}
+{errors.username && <p className="signup-err">{errors.username.message} </p>}
 </div>
 
 <div className="seu-box">

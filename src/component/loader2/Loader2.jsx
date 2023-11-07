@@ -1,4 +1,4 @@
-import "./Loader.scss"
+import "./Loader2.scss"
 
 export default function Loader(){
   

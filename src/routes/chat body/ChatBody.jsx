@@ -17,6 +17,8 @@ import {v4 as uuidv4} from "uuid"
 import {ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import {storage} from "/src/utils/firebase/firebase"
 import ImageDisplay from "/src/component/chat img display/ImageDisplay"
+import ChatImageHeader from "/src/component/chat image header/ChatImageHeader"
+import Loader from "/src/component/loader/Loader"
 export default function ChatBody(){
   const navigate = useNavigate()
   const {userInfo,xProfile, xId} = useContext(UserContext)
@@ -32,6 +34,7 @@ export default function ChatBody(){
   const [viewFile, setViewFile] = useState(null)
   const [imageUrl, setImageUrl] = useState(null)
   const [enableImageComp, setEnableImageComp] = useState(false)
+  const [enableChatImg, setEnableChatImg] = useState(false)
 /*
   const sendTypingStatus = () => {
     client.sendEvent('custom-typing-channel', { userId: userInfo.uid, isTyping: true });
@@ -76,7 +79,7 @@ const userMsgs = await db.createDocument("653d5e27b809bb998478", "654283639f58b9
 
      }
      catch(e){
-       console.log(e)
+      // console.log(e)
      }
      
      
@@ -97,7 +100,7 @@ const userMsgs = await db.createDocument("653d5e27b809bb998478", "654283639f58b9
 
    }
    catch(e){
-     console.log(e)
+    // console.log(e)
    }
    
    
@@ -113,14 +116,13 @@ const userMsgs = await db.createDocument("653d5e27b809bb998478", "654283639f58b9
      
        
      client.subscribe(`databases.${databaseId}.collections.${collectionId}.documents.${combinedId}`, response => {
-    //   console.log(response)
+
          setClicked(response)
       
-      // console.log(response)
+
        const b = response.payload.messages.map(el => JSON.parse(el))
        setMsgs(b)
-       
-     //console.log(b)
+      
       })
 
       
@@ -128,7 +130,7 @@ const userMsgs = await db.createDocument("653d5e27b809bb998478", "654283639f58b9
 
      
      }catch(e){
-       console.log(e)
+     //  console.log(e)
      }
      
    }
@@ -161,7 +163,7 @@ const updatedFriend = {
 
 const res = await db.updateDocument("653d5e27b809bb998478", "65414b49b5fdab9333dc", userInfo.uid, updatedFriend)
 setClicked(res)
-console.log(res)
+//console.log(res)
 }
 catch(e){
   console.log(e)
@@ -183,12 +185,15 @@ catch(e){
      const date = new Date()
      
      const res = await db.getDocument("653d5e27b809bb998478", "654283639f58b9326706", combinedId)
+     
+ const user = await db.getDocument("653d5e27b809bb998478","653d5e2e06524e9b0510", userInfo.uid)
+// console.log(JSON.parse(user.user[0]))
 
  const data = JSON.stringify({
          id: uuidv4(),
          userId: userInfo.uid,
          displayName: userInfo.displayName,
-         photoURL: userInfo.photoURL,
+         photoURL: JSON.parse(user.user[0]).photoURL,
          textMessage: value,
          imageMessage: null,
          unread: 0,
@@ -199,7 +204,8 @@ catch(e){
          isOnline: false,
          idCombined: combinedId
        })
-
+       
+       
 res.messages.push(data)
 
 const updatedData = {
@@ -222,7 +228,7 @@ const userDuplicate = msgUserPrevDoc.msgPrev.some(el => JSON.parse(el).userId ==
 
 //console.log(msgFriendUserDoc)
 //console.log(userDuplicate)
-  console.log(friendDuplicate)    
+ // console.log(friendDuplicate)    
  
 if(!userDuplicate){
   
@@ -288,7 +294,7 @@ if(!friendDuplicate){
          id: uuidv4(),
          userId: userInfo.uid,
          displayName: userInfo.displayName,
-         photoURL: userInfo.photoURL,
+         photoURL: JSON.parse(user.user[0]).photoURL,
          textMessage: value,
          imageMessage:null,
          unreadMsgs:[],
@@ -344,7 +350,7 @@ const updateFriend = msgFriendUserDoc.msgPrev.map(el =>{
 const updatedFriend = {
   msgPrev: [...updateFriend.map(el => JSON.stringify(el))]
 }
-console.log(updatedFriend)
+//console.log(updatedFriend)
 
 const res = await db.updateDocument("653d5e27b809bb998478", "65414b49b5fdab9333dc", xProfile.userId, updatedFriend)
 setClicked(res)
@@ -424,8 +430,23 @@ uploadTask.on('state_changed',
   }
  // console.log(xProfile)
  
+ const isUserTyping = (e) =>{
+   if(userInfo.uid === xProfile.userId){
+     setOtherUserIsTyping(true)
+   console.log("typing")
+   }
+ }
+ 
+ 
+const increImage = (idx) =>{
+  const item = document.querySelectorAll(".chatbody-chat-img")[idx]
+  console.log(item)
+//  item.style.width = "100vw"
+}
+
   return(
     <>
+  { enableChatImg && <ChatImageHeader/>}
   {enableImageComp &&  <ImageDisplay photoUrl={imageUrl} displayPhoto={viewFile} imageComp={setEnableImageComp} resetPhotoUrl={setImageUrl}/>}
     <div className="chatbody-container">
     <header className="chatbody-header">
@@ -453,7 +474,7 @@ uploadTask.on('state_changed',
     
     <main className="chatbody-main" > 
     
-{ msgs ?   msgs.map(el =>{
+{ msgs ?   msgs.map((el, index)=>{
 const date = new Date(el.time)
 const hr = date.getHours() > 0 && date.getHours() < 10 ? "0" + date.getHours() : date.getHours()
 const mins = date.getMinutes() > 0 && date.getMinutes() < 10 ? "0" + date.getHours() : date.getMinutes()
@@ -485,15 +506,19 @@ return(
 </div> : ""
 }
 {el.imageMessage ? (
-    <div className={userInfo.uid === el.userId ? "chatbody-Uimage-box" : "chatbody-Fimage-box"}>
+    <div  className={userInfo.uid === el.userId ? "chatbody-Uimage-box" : "chatbody-Fimage-box"}>
   { userInfo.uid !== el.userId  ? <div className={userInfo.uid !== el.userId ? "chatbody-friends-image" : "chatbody-users-image"}>
     <img src={el.photoURL} className="chatbody-friends-img"/>
     </div> : ""}
   
-    <div className="chatbody-chat-img">
+    <div className="chatbody-chat-img" onClick={()=>{
+      increImage(index)
+    }}>
     <div className="chatbody-cap">
-    <img className="chatbody-chat-imgg" src={el.imageMessage} />
-    
+    <div >
+
+    <img className="chatbody-chat-imgg" src={el.imageMessage}/>
+    </div>
    {el.caption ? <div className="caption"> {el.caption} </div>: ""}
    <div className="cap-sec">
        <div className="chatbody-chat-img-time">
@@ -514,15 +539,15 @@ return(
         </div>) : ""
 }
     </div>
-)}) : ""}
+)}) : <Loader/>}
     </main>
   
     <footer className="chatbody-footer">
     <div className="chatbody-input-box">
-    <textarea value={value} onChange={changeValue} className="chatbody-input"></textarea>
+    <textarea onKeyDown={isUserTyping} value={value} onChange={changeValue} className="chatbody-input"></textarea>
    <div className="chatbody-inicon-box">
    <div style={{overflow:"hidden",position:"relative" ,width:"20px", marginRight:".7rem"}} >
-  <input className="image" style={{position:"absolute", opacity:0}} onChange={getFile} type="file"/>
+  <input className="image" style={{position:"absolute", opacity:0}}  onChange={getFile} type="file"/>
   <AttachFileIcon />
   </div>
      <div style={{overflow:"hidden",position:"relative" ,width:"30px"}} >

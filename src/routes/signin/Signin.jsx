@@ -4,18 +4,20 @@ import { auth, signInWithEmailAndPass, signInWithGooglePopup} from "../../utils/
 import './Signin.scss'
 import signinImg from '/src/assets/html.webp'
 import { Link } from "react-router-dom";
-import {useContext} from "react"
+import {useContext, useState} from "react"
 import {UserContext} from "/src/context/UserContext"
 import GoogleIcon from '@mui/icons-material/Google';
 import Err from "/src/component/alert/err alert/Err"
 import {AlertContext} from "/src/context/AlertContext"
 import {useNavigate} from "react-router-dom"
 import {db} from "/src/utils/appwrite/appwrite"
+import Bg from "/src/component/bg/Bg"
 export default function Signin(){
     const {register,handleSubmit, formState:{errors}} = useForm({mode:"onChange"})
     const navigate = useNavigate()
     const {setUserInfo} = useContext(UserContext)
-    
+   const [done, setDone] = useState(false)
+   
    const {isValidationToggled, setErrMessage, setIsValidationToggled} = useContext(AlertContext)
  
    
@@ -33,25 +35,29 @@ export default function Signin(){
     }
 
 const submitForm = async (data) =>{
+  setDone(true)
   try{
   let {user} = await signInWithEmailAndPass(auth, data.email, data.password)
   
  localStorage.setItem("xChatUserInfo", JSON.stringify(user))
    const storage = localStorage.getItem("xChatUserInfo")
    setUserInfo(storage ? JSON.parse(storage) : null)
-   
+   setDone(false)
   navigate("/")
   }
   catch(e){
     if(e.code === "auth/invalid-login-credentials"){
       setIsValidationToggled(true)
       setErrMessage("Invalid credentials")
+      setDone(false)
     }
   }
    
 }
 
 const googleBtn = async () =>{
+  setDone(true)
+  
   try{
     const {user} = await signInWithGooglePopup()
  console.log(user)
@@ -62,13 +68,20 @@ const googleBtn = async () =>{
   
  const getExistingUser  = await db.getDocument("653d5e27b809bb998478","653d5e2e06524e9b0510", user.uid)
  
- 
+ setDone(false)
     navigate("/")
   }
   catch(e){
     console.log(e)
     if(e.code === 404){
+      setDone(false)
        navigate("/setting+up")
+       
+    }
+    else if(e.code === "auth/popup-closed-by-user"){
+      setErrMessage("connection timeout")
+      setIsValidationToggled(true)
+      setDone(false)
     }
   }
 }
@@ -79,6 +92,7 @@ const acct  = "Don't have an account?"
 
     return (
       <>
+      {done && <Bg/>}
      {isValidationToggled && <Err/>}
 
         <form className="signin-form" onSubmit={handleSubmit(submitForm)}>
@@ -103,7 +117,7 @@ const acct  = "Don't have an account?"
 </div>
 <div className="signin-btn-container">
 <button className="signin-btn">Sign in</button>
-<GoogleIcon sx={{fontSize:"40px"}}  className="signin-google" type="button" onClick={googleBtn}/>
+<GoogleIcon sx={{fontSize:"30px"}}  className="signin-google" type="button" onClick={googleBtn}/>
 </div>
 <p className="si-acct-link">{acct} <Link to={"/signup"} className="si-link">Sign up</Link></p>
 

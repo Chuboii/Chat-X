@@ -6,6 +6,7 @@ import {useContext} from "react"
 import {UserContext} from "/src/context/UserContext"
 import {ToggleContext} from "/src/context/ToggleContext"
 import {db} from "/src/utils/appwrite/appwrite"
+import Loader from "/src/component/loader/Loader"
 export default function SearchUsers(){
  const [value, setValue] = useState("")
  const [user, setUser] = useState(null)
@@ -13,7 +14,7 @@ const {userInfo} = useContext(UserContext)
 const [hasUserAdded, setHasUserAdded] = useState(false)
 const [searched, setSearched] = useState(null)
 const [isFriend, setIsFriend] = useState(false)
-
+const [isLoaded, setIsLoaded] = useState(false)
  const {toggleMenu,dispatch, state, setToggleMenu} = useContext(ToggleContext)
  
 useEffect(()=>{
@@ -42,7 +43,7 @@ const updateUserFriend = allUsers.documents.map(el =>{
 })
 //console.log(store)
 const b = allUsers.documents.filter(el => store.every(e => e.userId !== el.$id))
-console.log(b)
+//console.log(b)
 const mappedUsers = b.map(el =>{
   return JSON.parse(el.user)
 })
@@ -52,7 +53,7 @@ const getUsers = combinedData.filter(el => {
      return el.displayName.toLowerCase().includes(value.toLowerCase())
    })
 setUser(getUsers)
-
+setIsLoaded(false)
 }
 }
 catch(e){
@@ -64,7 +65,7 @@ catch(e){
 },[searched])
 
  
- 
+ //console.log(user)
  
  
  const changeValue = (e)=>{
@@ -80,7 +81,7 @@ catch(e){
    
    const res = await db.listDocuments("653d5e27b809bb998478", "653d5e2e06524e9b0510")
   
-   
+   setIsLoaded(true)
  //  setUser(getUsers)
      setSearched(res)
   
@@ -165,8 +166,9 @@ console.log("friend added")
 
 
   return (
+<>
 
-    <div className="search-user-container" style={{background: state.toggleBg ? "white" : "radial-gradient(circle, rgba(27,2,43,1) 0%, rgba(0,0,0,1) 50%)"}}>
+    <div className="search-user-container" style={{background: state.toggleBg ? "white" : "black"}}>
 <div className="search-user-divider">   
    <form onSubmit={submitForm} className="search-user-input-container">
     <input placeholder="Search here to meet people..." value={value} onChange={changeValue} type="search" className="search-user-input"/>
@@ -174,6 +176,8 @@ console.log("friend added")
     </form>
     
     <div className="display-searchItems">
+{isLoaded && <Loader/>}
+    {user ? user.length === 0 ? "No such user found" : "" : ""}
     {user ? user.map((el) => (
     <div key={el.user ? JSON.parse(el.user).id : el.id} className="search-user-box"> 
     <div className="search-user-image">
@@ -203,12 +207,13 @@ onClick = {()=>{
 </div>
 </div>
 </div>
-)) : ""}
+)) : "Nothing to see here"}
     </div>
     </div>
     <div className="search-user-second-divder">
 
     </div>
     </div>
+    </>
     )
 }

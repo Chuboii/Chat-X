@@ -34,15 +34,6 @@ useEffect(() =>{
     <div className="useronline-dot"> </div>
     </div>
    
-    <div className="useronline-user">
-    <div className="useronline-image">
-    <img src={userInfo.photoURL} className="useronline-img" />
-    </div>
-    <div className="useronline-name">
-    {userInfo.displayName}
-    </div>
-    <div className="useronline-dot"> </div>
-    </div>
     </div>
 )
 }

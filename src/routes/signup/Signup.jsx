@@ -17,6 +17,7 @@ import {useNavigate, Link} from "react-router-dom"
 import {db, storage} from "../../utils/appwrite/appwrite"
 import {v4 as uuidv4} from "uuid"
 import SettingUp from "/src/routes/setting up/SettingUp"
+import Bg from "/src/component/bg/Bg"
 export default function Signup(){
 const {setUserInfo} = useContext(UserContext)
 const {register,handleSubmit, formState:{errors}} = useForm({mode:"onChange"})
@@ -53,6 +54,7 @@ const registerOptions = {
 }
 
 const googleBtn = async () =>{
+  setDone(true)
   try{
     const {user} = await signInWithGooglePopup()
    
@@ -60,24 +62,25 @@ const googleBtn = async () =>{
    const userStorage = localStorage.getItem("xChatUserInfo")
    setUserInfo(storage ? JSON.parse(userStorage) : null)
    
-    await updateProfile(user, {
-    photoURL: user.photoURL,
-  })
+    
  
   const getExistingUser  = await db.getDocument("653d5e27b809bb998478","653d5e2e06524e9b0510", user.uid)
-  
-  
-  
- setTimeout(()=>{
+  setDone(false)
+ 
      navigate("/")
-    }, 2000)
     
   }
   catch(e){
     console.log(e)
     if(e.code === 404){
+      setDone(false)
       navigate("/setting+up")
       
+    }
+    else if(e.code === "auth/popup-closed-by-user"){
+      setErrMessage("connection timeout")
+      setIsValidationToggled(true)
+      setDone(false)
     }
   }
 }
@@ -88,6 +91,7 @@ const googleBtn = async () =>{
 const submitForm = async (data)=>{
   
   if(data.password === data.confirmPassword){
+  setDone(true)
   try{
    const {user} = await createUserWithEmailAndPass(auth, data.email, data.password)
    
@@ -100,21 +104,26 @@ localStorage.setItem("xChatUserInfo", JSON.stringify(user))
   
    setUserInfo(userStorage ? JSON.parse(userStorage) : null)
   
- setTimeout(()=>{
+ 
+   setDone(false)
     navigate("/setting+up")
-    }, 2000)
+
 
   }
   catch(e){
     console.log(e)
+    
     if(e.code === "auth/email-already-in-use"){
       setIsValidationToggled(true)
       setErrMessage("Email already in use")
+      setDone(false)
     }
+    
   }
   }
   else{
     setIsValidationToggled(true)
+    setDone(false)
     setErrMessage("Passwords do not match")
   }
 }
@@ -126,8 +135,8 @@ localStorage.setItem("xChatUserInfo", JSON.stringify(user))
     return (
       <>
       
-      {done && <Loader/>}
-      {done && <DarkBg/>}
+      {done && <Bg/>}
+  
       {isValidationToggled && <Err/>}
 
         <form onSubmit={handleSubmit(submitForm)} className="signup-form">
@@ -169,7 +178,7 @@ localStorage.setItem("xChatUserInfo", JSON.stringify(user))
 </div>
 <div className="signup-btn-container">
 <button className="signup-btn">Sign up</button>
-<GoogleIcon className="signup-google" sx={{fontSize:"40px"}} type="button" onClick={googleBtn}/>
+<GoogleIcon className="signup-google" sx={{fontSize:"30px"}} type="button" onClick={googleBtn}/>
 </div>
 
     <p className="su-acct-link" style={{color:"white", fontSize:"16px"}}>Already got an account? <Link to={"/signin"} className="su-link" >Sign in</Link></p>

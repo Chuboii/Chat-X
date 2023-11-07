@@ -9,8 +9,7 @@ body{
     left:0;
     right:0;
     bottom:0;
-   background: rgb(27,2,43);
-  background: radial-gradient(circle, rgba(27,2,43,1) 0%, rgba(0,0,0,1) 50%);
+   background:black;
   overflow-y: scroll;
   
   .chatbody-header{
@@ -71,7 +70,7 @@ body{
     }
   }
   .chatbody-main{
-   z-index:10;
+   
    position:relative;
    top:5rem;
    padding:.5rem;
@@ -98,7 +97,7 @@ body{
        font-size:13px;
        max-width:120px;
        min-width:100px;
-       background:gray;
+       background: purple;
        padding:.6rem;
        padding-bottom:1.1rem;
        border-radius:0 1rem 1rem 1rem;
@@ -141,6 +140,7 @@ body{
   display:flex;
  margin-top:.8rem;
  justify-content:flex-start;
+ 
  position: relative;
      .chatbody-friends-image{
        width:30px;
@@ -169,8 +169,7 @@ body{
          box-shadow: 0 0 10px 0 rgba(0, 0, 0, .4);
      background-color: rgba(255, 255, 255, .05);  
      backdrop-filter: blur(5px);
-         position:relative;
-         
+        
          .caption{
            font-size:13px;
            padding:.5rem;
@@ -189,7 +188,8 @@ body{
          width:180px;
        height:180px;
        object-fit: cover;
-        
+        transition:all .5s;
+        z-index:2501;
        }
        .chatbody-chat-img-time{
          font-size:7px;
@@ -229,7 +229,8 @@ body{
        word-break: break-word;
        margin-right:.6rem;
        position: relative;
-       background:#0000ff88;
+       background:white;
+       color:black;
    
    .chatbody-main-user-chat{
      text-align: left;

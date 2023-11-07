@@ -12,6 +12,7 @@ import {useEffect, useState, useContext} from "react"
 import {useNavigate} from "react-router-dom"
 import FriendSearch from "/src/component/friends search/FriendSearch"
 import {db} from "/src/utils/appwrite/appwrite"
+import Loader from "/src/component/loader/Loader"
 export default function AddedFriends(){
 const [data, setData] = useState([])
 const {userInfo,setXProfile, setXId} = useContext(UserContext)
@@ -108,7 +109,7 @@ Add Friends
         </p>
         </div>
        </div>
-     ) ):"" }
+     ) ):<Loader/> }
         </main>
         </div>
 

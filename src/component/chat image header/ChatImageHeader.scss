@@ -1,0 +1,18 @@
+.cih-container{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background: black;
+  z-index:2500;
+.chatimageheader-container{
+  display:flex;
+  padding:1rem;
+  
+  .cih-icons{
+    position:absolute;
+    right:1rem;
+  }
+}
+}

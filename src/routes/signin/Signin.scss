@@ -65,6 +65,7 @@
          background:orangered;
          padding:.5rem;
          border-radius:50%;
+         
        }
        .signin-btn{
          background: #007bff;
@@ -84,7 +85,11 @@
           text-decoration:none;
         }
        }
-    
+    .signin-err{
+      color:red;
+      font-size:10px;
+      margin-top:5px;
+    }
   }
   
   

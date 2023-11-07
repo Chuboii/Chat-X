@@ -3,7 +3,7 @@
    position: absolute;
     top: 50%;
     left: 50%;
-    width: 100%;
+    width: 85%;
     transform: translate(-50%, -50%);
   .seu-form{
     display: flex;
@@ -61,5 +61,10 @@ align-items: center;
          border:none;
          border-radius:5px;
          margin-top:1rem;
+       }
+       .signup-err{
+         color:red;
+         font-size:10px;
+         margin-top:5px;
        }
 }
